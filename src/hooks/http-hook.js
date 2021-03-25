@@ -8,15 +8,17 @@ export default function useHttpClient() {
   const [errors, setErrors] = useState();
 
   const makeRequest = useCallback(async (content) => {
-    const { url, method, params, data } = content;
+    const { url, method, params, data, headers, onUploadProgress } = content;
     setIsLoading(true);
     const options = {
       url: `${baseURL}${url}`,
       method: method,
     };
 
-    if (params) options.params = params;
     if (data) options.data = data;
+    if (params) options.params = params;
+    if (headers) options.headers = headers;
+    if (onUploadProgress) options.onUploadProgress = onUploadProgress;
     try {
       const response = await axios(options);
       setIsLoading(false);

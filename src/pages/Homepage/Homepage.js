@@ -5,7 +5,7 @@ import Post from "../../components/Post/Post";
 import useLoading from "../../components/Loading/Loading";
 
 export default function Homepage() {
-  const { isLoading, errors, makeRequest, clearErrors } = useHttpClient();
+  const { makeRequest } = useHttpClient();
   const [posts, setLoadedPosts] = useState(null);
   const { loadingBackdrop, closeLoading, setLoading } = useLoading();
 
