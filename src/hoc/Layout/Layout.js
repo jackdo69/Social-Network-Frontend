@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Layout(props) {
   const classes = useStyles();
-  const { Form, openForm, closeForm } = usePostForm();
+  const { Form, openForm } = usePostForm();
   return (
     <div>
       <Header />

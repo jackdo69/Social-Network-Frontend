@@ -1,20 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import UploadImage from "../UploadImage/UploadImage";
+import useHttpClient from "../../hooks/http-hook";
+import useLoading from "../../components/Loading/Loading";
 
 export default function usePostForm() {
-  const [open, setOpen] = React.useState(false);
-
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [image, setImage] = useState("");
+  const { makeRequest } = useHttpClient();
+  const { loadingBackdrop, closeLoading, setLoading } = useLoading();
   const openForm = () => {
     setOpen(true);
   };
 
-  const closeForm = () => {
+  const handleSubmit = async () => {
+    console.log("Title", title);
+    console.log("Content", content);
+    console.log("Image", image);
+    const user = "Duc Anh";
+    try {
+      setLoading();
+      await makeRequest({
+        url: "/post",
+        method: "post",
+        data: { title, content, image, user },
+      });
+      closeLoading();
+    } catch (err) {
+      console.log(err);
+    }
     setOpen(false);
   };
 
@@ -22,12 +43,14 @@ export default function usePostForm() {
     <div>
       <Dialog
         open={open}
-        onClose={closeForm}
+        onClose={() => setOpen(false)}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">New Post</DialogTitle>
         <DialogContent>
           <TextField
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
             required
             autoFocus
             margin="dense"
@@ -36,18 +59,21 @@ export default function usePostForm() {
             fullWidth
           />
           <TextField
+            onChange={(e) => setContent(e.target.value)}
+            value={content}
             id="content"
             label="content"
             placeholder="Placeholder"
             multiline
             fullWidth
           />
+          <UploadImage setImage={setImage} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeForm} color="primary">
+          <Button onClick={() => setOpen(false)} color="primary">
             Cancel
           </Button>
-          <Button onClick={closeForm} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Add
           </Button>
         </DialogActions>
@@ -55,5 +81,5 @@ export default function usePostForm() {
     </div>
   );
 
-  return { Form, openForm, closeForm };
+  return { Form, openForm };
 }
