@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -14,8 +14,11 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import useHttpClient from "../../hooks/http-hook";
+import useLoading from "../../components/Loading/Loading";
+import eventBus from "../../context/eventBus";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,13 +46,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RecipeReviewCard(props) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [expanded, setExpanded] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { makeRequest } = useHttpClient();
+  const { closeLoading, setLoading } = useLoading();
   const open = Boolean(anchorEl);
-
-  useEffect(() => {
-    console.log("Post component did mounted!");
-  }, []);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -60,6 +61,21 @@ export default function RecipeReviewCard(props) {
   };
 
   const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDelete = async () => {
+    try {
+      setLoading();
+      await makeRequest({
+        url: `/post/${props.id}`,
+        method: "delete",
+      });
+      eventBus.dispatch("postsChanged", {});
+      closeLoading();
+    } catch (err) {
+      console.log(err);
+    }
     setAnchorEl(null);
   };
 
@@ -100,7 +116,7 @@ export default function RecipeReviewCard(props) {
         onClose={handleClose}
       >
         <MenuItem onClick={handleClose}>Edit</MenuItem>
-        <MenuItem onClick={handleClose}>Delete</MenuItem>
+        <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">

@@ -8,6 +8,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import UploadImage from "../UploadImage/UploadImage";
 import useHttpClient from "../../hooks/http-hook";
 import useLoading from "../../components/Loading/Loading";
+import eventBus from "../../context/eventBus";
 
 export default function usePostForm() {
   const [open, setOpen] = useState(false);
@@ -15,15 +16,12 @@ export default function usePostForm() {
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
   const { makeRequest } = useHttpClient();
-  const { loadingBackdrop, closeLoading, setLoading } = useLoading();
+  const { closeLoading, setLoading } = useLoading();
   const openForm = () => {
     setOpen(true);
   };
 
   const handleSubmit = async () => {
-    console.log("Title", title);
-    console.log("Content", content);
-    console.log("Image", image);
     const user = "Duc Anh";
     try {
       setLoading();
@@ -32,6 +30,7 @@ export default function usePostForm() {
         method: "post",
         data: { title, content, image, user },
       });
+      eventBus.dispatch("postsChanged", { title, content, image, user });
       closeLoading();
     } catch (err) {
       console.log(err);
