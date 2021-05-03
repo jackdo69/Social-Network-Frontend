@@ -18,7 +18,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import useHttpClient from "../../hooks/http-hook";
 import useLoading from "../../components/Loading/Loading";
-import eventBus from "../../context/eventBus";
+
+//Redux area
+import { useDispatch } from 'react-redux';
+import { postActions } from '../../store/post'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,6 +55,8 @@ export default function RecipeReviewCard(props) {
   const { closeLoading, setLoading } = useLoading();
   const open = Boolean(anchorEl);
 
+  const dispatch = useDispatch()
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -68,10 +73,11 @@ export default function RecipeReviewCard(props) {
     try {
       setLoading();
       await makeRequest({
-        url: `/post/${props.id}`,
+        url: `/post/${props.content.id}`,
         method: "delete",
       });
-      eventBus.dispatch("postsChanged", {});
+
+      dispatch(postActions.removePost({ id: props.content.id }))
       closeLoading();
     } catch (err) {
       console.log(err);
@@ -92,12 +98,12 @@ export default function RecipeReviewCard(props) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={props.user}
-        subheader={props.createdAt}
+        title={props.content.user}
+        subheader={new Date(props.content.createdAt).toLocaleDateString()}
       />
       <CardMedia
         className={classes.media}
-        image={props.image}
+        image={props.content.image}
         title="Paella dish"
       />
       <Menu
@@ -120,7 +126,7 @@ export default function RecipeReviewCard(props) {
       </Menu>
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          {props.content}
+          {props.content.content}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

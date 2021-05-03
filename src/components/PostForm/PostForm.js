@@ -8,7 +8,10 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import UploadImage from "../UploadImage/UploadImage";
 import useHttpClient from "../../hooks/http-hook";
 import useLoading from "../../components/Loading/Loading";
-import eventBus from "../../context/eventBus";
+
+//Redux area
+import { useDispatch } from 'react-redux';
+import { postActions } from '../../store/post'
 
 export default function usePostForm() {
   const [open, setOpen] = useState(false);
@@ -21,16 +24,21 @@ export default function usePostForm() {
     setOpen(true);
   };
 
+  const dispatch = useDispatch();
+
   const handleSubmit = async () => {
+
     const user = "Duc Anh";
     try {
       setLoading();
-      await makeRequest({
+      const res = await makeRequest({
         url: "/post",
         method: "post",
         data: { title, content, image, user },
       });
-      eventBus.dispatch("postsChanged", { title, content, image, user });
+      dispatch(postActions.addPost({
+        post: res.result
+      }))
       closeLoading();
     } catch (err) {
       console.log(err);
