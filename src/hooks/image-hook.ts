@@ -1,8 +1,12 @@
 import useHttpClient from "./http-hook";
 
+interface UploadProgress {
+  (event: ProgressEvent) : void
+}
+
 export default function useImageService() {
   const { makeRequest } = useHttpClient();
-  const uploadImage = (file, uploadProgress) => {
+  const uploadImage = (file : File, uploadProgress: UploadProgress) => {
     let formData = new FormData();
     formData.append("file", file);
     return makeRequest({

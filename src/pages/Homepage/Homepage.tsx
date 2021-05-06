@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
-import useHttpClient from "../../hooks/http-hook.js";
+import useHttpClient from "../../hooks/http-hook";
 import Post from "../../components/Post/Post";
 import useLoading from "../../components/Loading/Loading";
 
 //Redux area
 import { useSelector, useDispatch } from 'react-redux'
 import { postActions } from '../../store/post'
+import { RootState } from '../../store/index'
 
 export default function Homepage() {
   const dispatch = useDispatch();
   const { makeRequest } = useHttpClient();
-  const posts = useSelector(state => state.post.posts);
+  const posts = useSelector((state: RootState) => state.post.posts);
   const { loadingBackdrop, closeLoading } = useLoading();
 
   const fetchPosts = async () => {
@@ -41,7 +42,7 @@ export default function Homepage() {
   let fetchedPosts;
   if (posts && posts.length) {
     fetchedPosts = posts.map((post) => {
-      return <Post key={post.id} content={post} />;
+      return <Post key={post.id} content={post.content} id={post.id} createdAt={post.createdAt} user={post.user} image={post.image} />;
     });
   }
 

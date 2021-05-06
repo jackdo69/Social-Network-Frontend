@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -17,13 +17,16 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import useHttpClient from "../../hooks/http-hook";
-import useLoading from "../../components/Loading/Loading";
+import useLoading from "../Loading/Loading";
 
 //Redux area
 import { useDispatch } from 'react-redux';
 import { postActions } from '../../store/post'
 
-const useStyles = makeStyles((theme) => ({
+//Interface
+import { Post } from '../../models/post'
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     maxWidth: 445,
     margin: 10,
@@ -47,10 +50,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RecipeReviewCard(props) {
+
+
+const RecipeReviewCard = (props: Post) => {
   const classes = useStyles();
-  const [expanded, setExpanded] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [expanded, setExpanded] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { makeRequest } = useHttpClient();
   const { closeLoading, setLoading } = useLoading();
   const open = Boolean(anchorEl);
@@ -61,7 +66,7 @@ export default function RecipeReviewCard(props) {
     setExpanded(!expanded);
   };
 
-  const handleMenu = (event) => {
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -73,11 +78,11 @@ export default function RecipeReviewCard(props) {
     try {
       setLoading();
       await makeRequest({
-        url: `/post/${props.content.id}`,
+        url: `/post/${props.id}`,
         method: "delete",
       });
 
-      dispatch(postActions.removePost({ id: props.content.id }))
+      dispatch(postActions.removePost({ id: props.id }))
       closeLoading();
     } catch (err) {
       console.log(err);
@@ -98,12 +103,12 @@ export default function RecipeReviewCard(props) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={props.content.user}
-        subheader={new Date(props.content.createdAt).toLocaleDateString()}
+        title={props.user}
+        subheader={new Date(props.createdAt).toLocaleDateString()}
       />
       <CardMedia
         className={classes.media}
-        image={props.content.image}
+        image={props.image}
         title="Paella dish"
       />
       <Menu
@@ -126,7 +131,7 @@ export default function RecipeReviewCard(props) {
       </Menu>
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          {props.content.content}
+          {props.content}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -150,3 +155,5 @@ export default function RecipeReviewCard(props) {
     </Card>
   );
 }
+
+export default RecipeReviewCard;

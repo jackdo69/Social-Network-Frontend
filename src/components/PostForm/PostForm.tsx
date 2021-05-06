@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -7,17 +7,17 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import UploadImage from "../UploadImage/UploadImage";
 import useHttpClient from "../../hooks/http-hook";
-import useLoading from "../../components/Loading/Loading";
+import useLoading from "../Loading/Loading";
 
 //Redux area
 import { useDispatch } from 'react-redux';
 import { postActions } from '../../store/post'
 
-export default function usePostForm() {
-  const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
+const usePostForm = () => {
+  const [open, setOpen] = React.useState(false);
+  const [title, setTitle] = React.useState("");
+  const [content, setContent] = React.useState("");
+  const [image, setImage] = React.useState("");
   const { makeRequest } = useHttpClient();
   const { closeLoading, setLoading } = useLoading();
   const openForm = () => {
@@ -90,3 +90,5 @@ export default function usePostForm() {
 
   return { Form, openForm };
 }
+
+export default usePostForm;

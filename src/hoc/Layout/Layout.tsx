@@ -1,4 +1,3 @@
-import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Header from "../../components/Header/Header";
@@ -14,7 +13,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Layout(props) {
+interface Props {
+  children: JSX.Element[] | JSX.Element
+}
+
+export default function Layout(props : Props) {
   const classes = useStyles();
   const { Form, openForm } = usePostForm();
   return (

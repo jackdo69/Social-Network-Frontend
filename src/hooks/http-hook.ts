@@ -1,16 +1,16 @@
 import { useState, useCallback } from "react";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 const baseURL = "http://localhost:4000";
 
 export default function useHttpClient() {
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState();
+  const [errors, setErrors] = useState(null);
 
   const makeRequest = useCallback(async (content) => {
     const { url, method, params, data, headers, onUploadProgress } = content;
     setIsLoading(true);
-    const options = {
+    const options: AxiosRequestConfig = {
       url: `${baseURL}${url}`,
       method: method,
     };
