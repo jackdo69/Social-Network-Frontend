@@ -1,5 +1,5 @@
 import React from "react";
-import useImageService from "../../hooks/image-hook";
+import useImageService from "../hooks/image-hook";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Box, Typography, Button, withStyles, Theme, createStyles } from '@material-ui/core';
 

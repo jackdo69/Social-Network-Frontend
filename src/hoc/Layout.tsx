@@ -1,9 +1,9 @@
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Header from "../../components/Header/Header";
+import Header from "../components/Header";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-import usePostForm from "../../components/PostForm/PostForm";
+import usePostForm from "../components/PostForm";
 
 const useStyles = makeStyles((theme) => ({
   fab: {

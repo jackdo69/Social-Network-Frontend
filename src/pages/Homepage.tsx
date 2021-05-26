@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import useHttpClient from "../../hooks/http-hook";
-import Post from "../../components/Post/Post";
-import useLoading from "../../components/Loading/Loading";
+import useHttpClient from "../hooks/http-hook";
+import Post from "../components/Post";
+import useLoading from "../components/Loading";
 
 //Redux area
-import { useSelector, useDispatch } from 'react-redux'
-import { postActions } from '../../store/post'
-import { RootState } from '../../store/index'
+import { useSelector, useDispatch } from 'react-redux';
+import { postActions } from '../store/post';
+import { RootState } from '../store/index';
 
-export default function Homepage() {
+const Homepage = () => {
   const dispatch = useDispatch();
   const { makeRequest } = useHttpClient();
   const posts = useSelector((state: RootState) => state.post.posts);
@@ -26,7 +26,7 @@ export default function Homepage() {
 
       dispatch(postActions.loadPosts({
         posts: response
-      }))
+      }));
       closeLoading();
     } catch (err) {
       console.log(err);
@@ -52,4 +52,6 @@ export default function Homepage() {
       {fetchedPosts}
     </div>
   );
-}
+};
+
+export default Homepage;

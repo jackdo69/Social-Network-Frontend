@@ -5,25 +5,36 @@ import {
   Redirect,
   Switch,
 } from "react-router-dom";
-import Homepage from "./pages/Homepage/Homepage";
-import Layout from "./hoc/Layout/Layout";
-import Search from "./pages/Search/Search";
-import User from "./pages/User/User";
+import { useSelector } from 'react-redux';
+import Homepage from "./pages/Homepage";
+import Layout from "./hoc/Layout";
+import Search from "./pages/Search";
+import User from "./pages/User";
+import Auth from "./pages/Auth";
+import { RootState } from "./store";
 
-export default function App() {
+const App = () => {
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const routes = (
     <Switch>
       <Route path="/user" component={User} />
       <Route path="/search" component={Search} />
-      <Route path="/" exact component={Homepage} />
-      <Redirect to="/" />
+      <Route path="/home" exact component={Homepage} />
     </Switch>
   );
-  return (
-    <div>
-      <Router>
-        <Layout>{routes}</Layout>
-      </Router>
-    </div>
-  );
-}
+
+  if (isLoggedIn) {
+    return (
+      <div>
+        <Router>
+          <Layout>{routes}</Layout>
+        </Router>
+      </div>
+    );
+  } else {
+    return <Auth />;
+  }
+
+};
+
+export default App;

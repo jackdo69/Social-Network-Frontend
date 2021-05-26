@@ -16,15 +16,15 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import useHttpClient from "../../hooks/http-hook";
-import useLoading from "../Loading/Loading";
+import useHttpClient from "../hooks/http-hook";
+import useLoading from "./Loading";
 
 //Redux area
 import { useDispatch } from 'react-redux';
-import { postActions } from '../../store/post'
+import { postActions } from '../store/post'
 
 //Interface
-import { Post } from '../../models/post'
+import { Post } from '../models/post'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {

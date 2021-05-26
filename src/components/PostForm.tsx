@@ -5,13 +5,13 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import UploadImage from "../UploadImage/UploadImage";
-import useHttpClient from "../../hooks/http-hook";
-import useLoading from "../Loading/Loading";
+import UploadImage from "./UploadImage";
+import useHttpClient from "../hooks/http-hook";
+import useLoading from "./Loading";
 
 //Redux area
 import { useDispatch } from 'react-redux';
-import { postActions } from '../../store/post'
+import { postActions } from '../store/post'
 
 const usePostForm = () => {
   const [open, setOpen] = React.useState(false);
