@@ -2,6 +2,7 @@ import React from "react";
 import useImageService from "../hooks/image-hook";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Box, Typography, Button, withStyles, Theme, createStyles } from '@material-ui/core';
+import { UploadImagePropsFunction } from '../interfaces';
 
 const BorderLinearProgress = withStyles((theme: Theme) => createStyles({
   root: {
@@ -17,11 +18,9 @@ const BorderLinearProgress = withStyles((theme: Theme) => createStyles({
   },
 }))(LinearProgress);
 
-interface PropsFunction {
-  setImage: (value: string | ((prevImg: string) => string)) => void;
-}
 
-const UploadImage: React.FC<PropsFunction> = (props: PropsFunction) => {
+
+const UploadImage: React.FC<UploadImagePropsFunction> = (props: UploadImagePropsFunction) => {
   const [image, setImage] = React.useState<File>();
   const [progress, setProgress] = React.useState(0);
   const [previewImage, setPreviewImage] = React.useState('');
@@ -35,7 +34,7 @@ const UploadImage: React.FC<PropsFunction> = (props: PropsFunction) => {
   const upload = () => {
     image && uploadImage(image, (event: ProgressEvent) => {
       setProgress(Math.round((100 * event.loaded) / event.total));
-      props.setImage(`http://localhost:4000/images/${image.name}`)
+      props.setImage(`http://localhost:4000/images/${image.name}`);
     });
   };
 
@@ -88,6 +87,6 @@ const UploadImage: React.FC<PropsFunction> = (props: PropsFunction) => {
 
     </div >
   );
-}
+};
 
 export default UploadImage;

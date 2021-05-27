@@ -1,16 +1,10 @@
 import { useState, useCallback } from "react";
-import axios, { AxiosRequestConfig, Method } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
+import { HttPContent } from '../interfaces';
 
 const baseURL = "http://localhost:4000";
 
-type HttPContent = {
-  url?: string,
-  method?: Method,
-  params?: any,
-  data?: object,
-  headers?: object,
-  onUploadProgress?: (progressEvent: any) => void;
-};
+
 
 export default function useHttpClient() {
   const [isLoading, setIsLoading] = useState(false);

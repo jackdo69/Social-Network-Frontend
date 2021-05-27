@@ -1,11 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AuthSliceState } from '../interfaces';
 
-interface SliceState {
-    accessToken: string,
-    refreshToken: string;
-}
 
-const initialAuthState: SliceState = { accessToken: '', refreshToken: '' };
+const initialAuthState: AuthSliceState = { accessToken: '', refreshToken: '' };
 
 const authSlice = createSlice({
     name: 'auth',

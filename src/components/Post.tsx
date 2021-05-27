@@ -24,7 +24,7 @@ import { useDispatch } from 'react-redux';
 import { postActions } from '../store/post'
 
 //Interface
-import { Post } from '../models/post'
+import { Post } from '../interfaces'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {

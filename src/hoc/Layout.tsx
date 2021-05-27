@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import usePostForm from "../components/PostForm";
+import { LayoutProps } from '../interfaces';
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -13,11 +14,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {
-  children: JSX.Element[] | JSX.Element
-}
 
-export default function Layout(props : Props) {
+
+export default function Layout(props: LayoutProps) {
   const classes = useStyles();
   const { Form, openForm } = usePostForm();
   return (

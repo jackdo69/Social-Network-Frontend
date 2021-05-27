@@ -10,6 +10,7 @@ import useHttpClient from "../hooks/http-hook";
 import useAuth from '../hooks/auth-hook';
 
 import { useHistory } from "react-router-dom";
+import { AuthRequestData } from '../interfaces';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,11 +41,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type RequestData = {
-  username: string,
-  password: string,
-  email?: string;
-};
+
 
 const Auth = () => {
   const classes = useStyles();
@@ -62,7 +59,7 @@ const Auth = () => {
     e.preventDefault();
     let mode;
     isLogin ? mode = 'login' : mode = 'register';
-    let requestData: RequestData = { username, password };
+    let requestData: AuthRequestData = { username, password };
     if (mode === 'register') {
       requestData.email = email;
     }
