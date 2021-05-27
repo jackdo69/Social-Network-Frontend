@@ -6,6 +6,11 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 
+import useHttpClient from "../hooks/http-hook";
+import useAuth from '../hooks/auth-hook';
+
+import { useHistory } from "react-router-dom";
+
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -22,55 +27,102 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(2),
     },
   },
+  switchMode: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '0.3em'
+  },
+  anchor: {
+    color: 'blue',
+    textDecoration: 'underline',
+    marginLeft: '0.1em',
+    cursor: 'pointer'
+  }
 }));
+
+type RequestData = {
+  username: string,
+  password: string,
+  email?: string;
+};
 
 const Auth = () => {
   const classes = useStyles();
-  // create state variables for each input
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [open, setOpen] = useState(true);
   const [isLogin, setIsLogin] = useState(true);
+  const { makeRequest } = useHttpClient();
+  const { login } = useAuth();
+  const history = useHistory();
 
   const closeModal = () => { };
-  const handleSubmit = () => { };
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    let mode;
+    isLogin ? mode = 'login' : mode = 'register';
+    let requestData: RequestData = { username, password };
+    if (mode === 'register') {
+      requestData.email = email;
+    }
+    try {
+      const { accessToken, refreshToken } = await makeRequest({
+        url: `/auth/${mode}`,
+        method: 'post',
+        data: requestData
+      });
+
+      login(accessToken, refreshToken);
+      history.push("/home");
+    } catch (err) {
+      console.log(err);
+
+    }
+  };
+
   return (
     <Dialog open={open} onClose={closeModal}>
-      <DialogTitle id="form-dialog-title">Register</DialogTitle>
-      <form className={classes.root} onSubmit={handleSubmit}>
-        <TextField
-          label="Username"
-          variant="filled"
-          required
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-        />
-        <TextField
-          label="Email"
-          variant="filled"
-          type="email"
-          required
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <TextField
-          label="Password"
-          variant="filled"
-          type="password"
-          required
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
-        <div>
-          <Button variant="contained" onClick={closeModal}>
-            Cancel
+      <DialogTitle id="form-dialog-title">{isLogin ? 'Login' : 'Register'}</DialogTitle>
+      <DialogContent>
+        <form onSubmit={handleSubmit} className={classes.root} >
+          <TextField
+            label="Username"
+            variant="filled"
+            required
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+          {!isLogin && <TextField
+            label="Email"
+            variant="filled"
+            type="email"
+            required
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />}
+          <TextField
+            label="Password"
+            variant="filled"
+            type="password"
+            required
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+          <div>
+            <Button variant="contained" onClick={closeModal}>
+              Cancel
         </Button>
-          <Button type="submit" variant="contained" color="primary">
-            Signup
-        </Button>
+            <Button type="submit" variant="contained" color="primary">
+              {isLogin ? 'Login' : 'Register'}
+            </Button>
+          </div>
+        </form>
+        <div className={classes.switchMode}>
+          {isLogin ? "Haven't got an account yet?" : "Click here to return to login!"}
+          <a className={classes.anchor} onClick={() => setIsLogin(!isLogin)}> {isLogin ? ' Register' : ' Login'} </a>
         </div>
-      </form>
+      </DialogContent>
     </Dialog>
   );
 };

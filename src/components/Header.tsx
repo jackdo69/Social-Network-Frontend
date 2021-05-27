@@ -15,6 +15,9 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
+import useAuth from '../hooks/auth-hook';
+import { useHistory } from 'react-router-dom';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     grow: {
@@ -85,6 +88,8 @@ const PrimarySearchAppBar = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { logout } = useAuth();
+  const history = useHistory();
 
 
   const isMenuOpen = Boolean(anchorEl);
@@ -103,6 +108,12 @@ const PrimarySearchAppBar = () => {
     handleMobileMenuClose();
   };
 
+  const signOut = () => {
+    logout();
+    handleMenuClose();
+    history.push('/auth');
+  };
+
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -119,7 +130,7 @@ const PrimarySearchAppBar = () => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={signOut}>Sign out</MenuItem>
     </Menu>
   );
 
@@ -232,6 +243,6 @@ const PrimarySearchAppBar = () => {
       {renderMenu}
     </div>
   );
-}
+};
 
-export default PrimarySearchAppBar
+export default PrimarySearchAppBar;
