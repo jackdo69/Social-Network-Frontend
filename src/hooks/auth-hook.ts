@@ -17,7 +17,7 @@ const useAuth = () => {
     };
 
     const logout = () => {
-        dispatch(authActions.logout);
+        dispatch(authActions.logout({}));
         localStorage.clear();
     };
 

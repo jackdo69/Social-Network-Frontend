@@ -1,6 +1,8 @@
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Header from "../components/Header";
+import Loading from '../components/Loading';
+import Toast from '../components/Toast';
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import usePostForm from "../components/PostForm";
@@ -21,9 +23,13 @@ export default function Layout(props: LayoutProps) {
   const { Form, openForm } = usePostForm();
   return (
     <div>
+      <Loading />
+      <Toast />
       <Header />
       {Form}
-      <Container maxWidth="sm">{props.children}</Container>
+      <Container maxWidth="sm">
+        {props.children}
+      </Container>
       <Fab
         className={classes.fab}
         color="primary"

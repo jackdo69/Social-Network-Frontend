@@ -17,14 +17,14 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import useHttpClient from "../hooks/http-hook";
-import useLoading from "./Loading";
 
 //Redux area
 import { useDispatch } from 'react-redux';
-import { postActions } from '../store/post'
+import { postActions } from '../store/post';
+import { loadingActions } from '../store/loading';
 
 //Interface
-import { Post } from '../interfaces'
+import { Post } from '../interfaces';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -56,11 +56,10 @@ const RecipeReviewCard = (props: Post) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const { makeRequest } = useHttpClient();
-  const { closeLoading, setLoading } = useLoading();
   const open = Boolean(anchorEl);
+  const { makeRequest } = useHttpClient();
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -75,18 +74,15 @@ const RecipeReviewCard = (props: Post) => {
   };
 
   const handleDelete = async () => {
-    try {
-      setLoading();
-      await makeRequest({
-        url: `/post/${props.id}`,
-        method: "delete",
-      });
+    dispatch(loadingActions.setLoading({ status: true }));
+    await makeRequest({
+      url: `/post/${props.id}`,
+      method: "delete",
+    });
 
-      dispatch(postActions.removePost({ id: props.id }))
-      closeLoading();
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(postActions.removePost({ id: props.id }));
+    dispatch(loadingActions.setLoading({ status: false }));
+
     setAnchorEl(null);
   };
 
@@ -130,6 +126,9 @@ const RecipeReviewCard = (props: Post) => {
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
       <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {props.title}
+        </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
           {props.content}
         </Typography>
@@ -154,6 +153,6 @@ const RecipeReviewCard = (props: Post) => {
       </CardActions>
     </Card>
   );
-}
+};
 
 export default RecipeReviewCard;

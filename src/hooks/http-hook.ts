@@ -1,41 +1,40 @@
-import { useState, useCallback } from "react";
 import axios, { AxiosRequestConfig } from "axios";
 import { HttPContent } from '../interfaces';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store/index';
+import { toastActions } from '../store/toast';
 
-const baseURL = "http://localhost:4000";
 
-
-
-export default function useHttpClient() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState(null);
-
-  const makeRequest = useCallback(async (content: HttPContent) => {
-    const { url, method, params, data, headers, onUploadProgress } = content;
-    setIsLoading(true);
+const BASE_URL = "http://localhost:4000";
+const useHttpClient = () => {
+  const token = useSelector((state: RootState) => state.auth.accessToken);
+  const dispatch = useDispatch();
+  const makeRequest = async (content: HttPContent) => {
+    const { url, method, params, data, onUploadProgress } = content;
     const options: AxiosRequestConfig = {
-      url: `${baseURL}${url}`,
+      url: `${BASE_URL}${url}`,
       method: method,
     };
 
     if (data) options.data = data;
     if (params) options.params = params;
-    if (headers) options.headers = headers;
+    if (token && token.length) options.headers = {
+      'Authorization': `Bearer ${token}`
+    };
     if (onUploadProgress) options.onUploadProgress = onUploadProgress;
     try {
       const response = await axios(options);
-      setIsLoading(false);
       return response.data;
     } catch (err) {
-      setErrors(err.message);
-      setIsLoading(false);
-      throw err;
+      dispatch(toastActions.setToast({
+        severity: 'error',
+        message: `${err.response.data.statusCode} - ${err.response.data.message}`
+      }))
     }
-  }, []);
-
-  const clearErrors = () => {
-    setErrors(null);
   };
 
-  return { isLoading, errors, makeRequest, clearErrors };
-}
+  return { makeRequest };
+};
+
+export default useHttpClient;
+

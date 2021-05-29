@@ -2,11 +2,15 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import postReducer from './post';
 import authReducer from './auth';
+import loadingReducer from './loading';
+import toastReducer from './toast';
 
 const store = configureStore({
     reducer: {
         post: postReducer,
-        auth: authReducer
+        auth: authReducer,
+        loading: loadingReducer,
+        toast: toastReducer
     }
 });
 

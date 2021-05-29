@@ -7,42 +7,38 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import UploadImage from "./UploadImage";
 import useHttpClient from "../hooks/http-hook";
-import useLoading from "./Loading";
 
 //Redux area
 import { useDispatch } from 'react-redux';
-import { postActions } from '../store/post'
+import { postActions } from '../store/post';
+import { loadingActions } from '../store/loading';
 
 const usePostForm = () => {
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
   const [image, setImage] = React.useState("");
-  const { makeRequest } = useHttpClient();
-  const { closeLoading, setLoading } = useLoading();
   const openForm = () => {
     setOpen(true);
   };
 
   const dispatch = useDispatch();
+  const { makeRequest } = useHttpClient();
 
   const handleSubmit = async () => {
 
     const user = "Duc Anh";
-    try {
-      setLoading();
-      const res = await makeRequest({
-        url: "/post",
-        method: "post",
-        data: { title, content, image, user },
-      });
-      dispatch(postActions.addPost({
-        post: res.result
-      }))
-      closeLoading();
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(loadingActions.setLoading({ status: true }));
+    const res = await makeRequest({
+      url: "/post",
+      method: "post",
+      data: { title, content, image, user },
+    });
+    dispatch(postActions.addPost({
+      post: res.result
+    }));
+    dispatch(loadingActions.setLoading({ status: false }));
+
     setOpen(false);
   };
 
@@ -89,6 +85,6 @@ const usePostForm = () => {
   );
 
   return { Form, openForm };
-}
+};
 
 export default usePostForm;

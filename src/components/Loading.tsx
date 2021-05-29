@@ -1,7 +1,9 @@
-import React from "react";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store/index';
+import { loadingActions } from '../store/loading';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   backdrop: {
@@ -10,23 +12,22 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function useLoading() {
+const Loading = () => {
+  const dispatch = useDispatch();
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const status = useSelector((state: RootState) => state.loading.show);
   const closeLoading = () => {
-    setOpen(false);
+    dispatch(loadingActions.setLoading({ status: false }));
   };
-    const setLoading = () => {
-      setOpen(!open);
-    };
 
-  const loadingBackdrop = (
+  return (
     <div>
-      <Backdrop className={classes.backdrop} open={open} onClick={closeLoading}>
+      <Backdrop className={classes.backdrop} open={status} onClick={closeLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </div>
   );
 
-  return { loadingBackdrop, closeLoading, setLoading };
-}
+};
+
+export default Loading;

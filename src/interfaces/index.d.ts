@@ -5,7 +5,8 @@ interface Post {
     content: string,
     createdAt: string,
     image: string,
-    user: string;
+    user: string,
+    title: string;
 }
 
 interface UploadImagePropsFunction {
@@ -44,6 +45,16 @@ interface AuthSliceState {
     refreshToken: string;
 }
 
+interface LoadingSliceState {
+    show: boolean;
+}
+
+interface ToastSliceState {
+    severity: 'error' | 'warning' | 'success' | 'info',
+    message: string,
+    show?: boolean
+}
+
 export {
     Post,
     UploadImagePropsFunction,
@@ -52,5 +63,7 @@ export {
     UploadProgress,
     AuthRequestData,
     PostSliceState,
-    AuthSliceState
+    AuthSliceState,
+    LoadingSliceState,
+    ToastSliceState
 };

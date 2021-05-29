@@ -48,11 +48,10 @@ const Auth = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [open, setOpen] = useState(true);
   const [isLogin, setIsLogin] = useState(true);
-  const { makeRequest } = useHttpClient();
   const { login } = useAuth();
   const history = useHistory();
+  const { makeRequest } = useHttpClient();
 
   const closeModal = () => { };
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -63,23 +62,19 @@ const Auth = () => {
     if (mode === 'register') {
       requestData.email = email;
     }
-    try {
-      const { accessToken, refreshToken } = await makeRequest({
-        url: `/auth/${mode}`,
-        method: 'post',
-        data: requestData
-      });
+    const { accessToken, refreshToken } = await makeRequest({
+      url: `/auth/${mode}`,
+      method: 'post',
+      data: requestData
+    });
 
-      login(accessToken, refreshToken);
-      history.push("/home");
-    } catch (err) {
-      console.log(err);
+    login(accessToken, refreshToken);
+    history.push("/home");
 
-    }
   };
 
   return (
-    <Dialog open={open} onClose={closeModal}>
+    <Dialog open={true} onClose={closeModal}>
       <DialogTitle id="form-dialog-title">{isLogin ? 'Login' : 'Register'}</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit} className={classes.root} >
