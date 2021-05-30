@@ -29,7 +29,7 @@ const Toast = () => {
 
   return (
     <div className={classes.root}>
-      <Snackbar open={show} autoHideDuration={2000} onClose={handleClose}>
+      <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'center'}} open={show} autoHideDuration={4000} onClose={handleClose}>
         <MuiAlert elevation={6} variant="filled" onClose={handleClose} severity={severity}>
           {message}
         </MuiAlert>

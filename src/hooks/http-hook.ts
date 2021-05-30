@@ -10,7 +10,7 @@ const useHttpClient = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
   const makeRequest = async (content: HttPContent) => {
-    const { url, method, params, data, onUploadProgress } = content;
+    const { url, method, params, data, onUploadProgress, toastMessage } = content;
     const options: AxiosRequestConfig = {
       url: `${BASE_URL}${url}`,
       method: method,
@@ -24,12 +24,16 @@ const useHttpClient = () => {
     if (onUploadProgress) options.onUploadProgress = onUploadProgress;
     try {
       const response = await axios(options);
+      toastMessage && dispatch(toastActions.setToast({
+        severity: 'success',
+        message: `${toastMessage}`
+      }));
       return response.data;
     } catch (err) {
       dispatch(toastActions.setToast({
         severity: 'error',
         message: `${err.response.data.statusCode} - ${err.response.data.message}`
-      }))
+      }));
     }
   };
 

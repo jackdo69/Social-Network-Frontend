@@ -23,7 +23,8 @@ interface HttPContent {
     params?: any,
     data?: object,
     headers?: object,
-    onUploadProgress?: (progressEvent: any) => void;
+    onUploadProgress?: (progressEvent: any) => void,
+    toastMessage?: string
 }
 
 interface UploadProgress {
@@ -52,7 +53,17 @@ interface LoadingSliceState {
 interface ToastSliceState {
     severity: 'error' | 'warning' | 'success' | 'info',
     message: string,
-    show?: boolean
+    show?: boolean;
+}
+
+interface FormParams {
+    action: 'add' | 'edit',
+    payload?: {
+        id: string,
+        content: string,
+        image: string,
+        title: string;
+    };
 }
 
 export {
@@ -65,5 +76,6 @@ export {
     PostSliceState,
     AuthSliceState,
     LoadingSliceState,
-    ToastSliceState
+    ToastSliceState,
+    FormParams
 };

@@ -20,8 +20,9 @@ import useHttpClient from "../hooks/http-hook";
 
 //Redux area
 import { useDispatch } from 'react-redux';
-import { postActions } from '../store/post';
+import post, { postActions } from '../store/post';
 import { loadingActions } from '../store/loading';
+import usePostForm from "../hooks/post-form-hook";
 
 //Interface
 import { Post } from '../interfaces';
@@ -58,8 +59,8 @@ const RecipeReviewCard = (props: Post) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const { makeRequest } = useHttpClient();
-
   const dispatch = useDispatch();
+  const { openForm, Form } = usePostForm();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -73,11 +74,25 @@ const RecipeReviewCard = (props: Post) => {
     setAnchorEl(null);
   };
 
+  const handleEdit = () => {
+    openForm({
+      action: 'edit',
+      payload: {
+        id: props.id,
+        title: props.title,
+        content: props.content,
+        image: props.image
+      }
+    });
+    setAnchorEl(null);
+  };
+
   const handleDelete = async () => {
     dispatch(loadingActions.setLoading({ status: true }));
     await makeRequest({
       url: `/post/${props.id}`,
       method: "delete",
+      toastMessage: 'Post deleted successfully!'
     });
 
     dispatch(postActions.removePost({ id: props.id }));
@@ -88,6 +103,7 @@ const RecipeReviewCard = (props: Post) => {
 
   return (
     <Card className={classes.root}>
+      {Form}
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
@@ -122,7 +138,7 @@ const RecipeReviewCard = (props: Post) => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Edit</MenuItem>
+        <MenuItem onClick={handleEdit}>Edit</MenuItem>
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
       <CardContent>

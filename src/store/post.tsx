@@ -15,8 +15,18 @@ const postSlice = createSlice({
         addPost(state, action: PayloadAction<{ post: Post; }>) {
             state.posts.push(action.payload.post);
         },
-        removePost(state, action) {
+        removePost(state, action: PayloadAction<{ id: string; }>) {
             if (state.posts.length) state.posts = state.posts.filter(i => i.id !== action.payload.id);
+        },
+        editPost(state, action: PayloadAction<{ id: string, content: string, title: string; }>) {
+            const clonePosts = [...state.posts]
+            const updatedPost = clonePosts.find(p => p.id === action.payload.id);
+            
+            if (updatedPost) {
+                updatedPost.content = action.payload.content;
+                updatedPost.title = action.payload.title;
+            }
+            state.posts = clonePosts
         }
     }
 });
