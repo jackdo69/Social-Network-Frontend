@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import useHttpClient from "../hooks/http-hook";
+import Layout from '../hoc/Layout';
 import Post from "../components/Post";
 import { AxiosRequestConfig } from 'axios';
 
@@ -49,7 +50,11 @@ const Homepage = () => {
 
   return (
     <div>
-      {fetchedPosts}
+      <Layout
+        leftSideBar={'Friends suggestion'}
+        main={fetchedPosts}
+        rightSideBar={'Chatbox'}
+      />
     </div>
   );
 };

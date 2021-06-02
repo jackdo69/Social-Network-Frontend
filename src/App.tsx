@@ -1,4 +1,5 @@
-import React from "react";
+import { MuiThemeProvider, createMuiTheme, createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import CssBaseline from "@material-ui/core/CssBaseline";
 import {
   BrowserRouter,
   Route,
@@ -6,14 +7,24 @@ import {
   Switch,
 } from "react-router-dom";
 import useAuth from './hooks/auth-hook';
-import Layout from "./hoc/Layout";
+import Container from "./hoc/Container";
 //routes
 import Homepage from "./pages/Homepage";
 import User from "./pages/User";
 import Auth from "./pages/Auth";
 
+const theme = createMuiTheme({
+  palette: {
+    background: {
+      default: "#fafafa"
+    }
+  }
+});
+
+
 const App = () => {
   const { isLoggedIn } = useAuth();
+
 
   const routes = (
     <Switch>
@@ -25,11 +36,12 @@ const App = () => {
   );
 
   return (
-    <div>
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
       <BrowserRouter>
-        <Layout>{routes}</Layout>
+        <Container>{routes}</Container>
       </BrowserRouter>
-    </div>
+    </MuiThemeProvider>
   );
 
 

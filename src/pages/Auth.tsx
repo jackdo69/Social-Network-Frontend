@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -111,8 +111,10 @@ const Auth = () => {
           </div>
         </form>
         <div className={classes.switchMode}>
-          {isLogin ? "Haven't got an account yet?" : "Click here to return to login!"}
-          <a className={classes.anchor} onClick={() => setIsLogin(!isLogin)}> {isLogin ? ' Register' : ' Login'} </a>
+          <Typography variant={'body1'}>
+            {isLogin ? "Haven't got an account yet?" : "Click here to return to login!"}
+            <a className={classes.anchor} onClick={() => setIsLogin(!isLogin)}> {isLogin ? ' Register' : ' Login'} </a>
+          </Typography>
         </div>
       </DialogContent>
     </Dialog>

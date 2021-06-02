@@ -29,8 +29,8 @@ import { Post } from '../interfaces';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
-    maxWidth: 445,
-    margin: 10,
+    maxWidth: "70vw",
+    margin: '2em auto'
   },
   media: {
     height: 0,

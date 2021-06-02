@@ -1,4 +1,5 @@
 import { Method } from 'axios';
+import React from 'react';
 
 interface Post {
     id: string,
@@ -13,8 +14,14 @@ interface UploadImagePropsFunction {
     setImage: (value: string | ((prevImg: string) => string)) => void;
 }
 
-interface LayoutProps {
+interface ContainerProps {
     children: JSX.Element[] | JSX.Element;
+}
+
+interface LayoutProps {
+    leftSideBar?: React.ReactNode,
+    main: React.ReactNode,
+    rightSideBar?: React.ReactNode;
 }
 
 interface HttPContent {
@@ -24,7 +31,7 @@ interface HttPContent {
     data?: object,
     headers?: object,
     onUploadProgress?: (progressEvent: any) => void,
-    toastMessage?: string
+    toastMessage?: string;
 }
 
 interface UploadProgress {
@@ -69,6 +76,7 @@ interface FormParams {
 export {
     Post,
     UploadImagePropsFunction,
+    ContainerProps,
     LayoutProps,
     HttPContent,
     UploadProgress,
