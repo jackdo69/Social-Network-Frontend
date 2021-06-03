@@ -49,13 +49,11 @@ const Homepage = () => {
   }
 
   return (
-    <div>
-      <Layout
-        leftSideBar={'Friends suggestion'}
-        main={fetchedPosts}
-        rightSideBar={'Chatbox'}
-      />
-    </div>
+    <Layout
+      leftSideBar={'Friends suggestion'}
+      main={fetchedPosts}
+      rightSideBar={'Chatbox'}
+    />
   );
 };
 
