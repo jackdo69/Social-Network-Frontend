@@ -10,13 +10,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import Avatar from '@material-ui/core/Avatar';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
 import useAuth from '../hooks/auth-hook';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -90,6 +92,7 @@ const PrimarySearchAppBar = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
   const { logout } = useAuth();
   const history = useHistory();
+  const image = useSelector((state: RootState) => state.user.image);
 
 
   const isMenuOpen = Boolean(anchorEl);
@@ -114,6 +117,11 @@ const PrimarySearchAppBar = () => {
     history.push('/auth');
   };
 
+  const navigateUserPage = () => {
+    handleMenuClose();
+    history.push('/user');
+  };
+
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -129,7 +137,7 @@ const PrimarySearchAppBar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={navigateUserPage}>Profile</MenuItem>
       <MenuItem onClick={signOut}>Sign out</MenuItem>
     </Menu>
   );
@@ -168,7 +176,7 @@ const PrimarySearchAppBar = () => {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <Avatar alt="User picture" src={image} />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -223,7 +231,7 @@ const PrimarySearchAppBar = () => {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <Avatar alt="User picture" src={image} />
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>

@@ -12,7 +12,8 @@ import useHttpClient from "./http-hook";
 import { useDispatch } from 'react-redux';
 import { postActions } from '../store/post';
 import { loadingActions } from '../store/loading';
-import { toastActions } from '../store/toast';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 import { FormParams } from '../interfaces';
 
@@ -25,6 +26,7 @@ const usePostForm = () => {
   const [action, setAction] = useState('');
   const dispatch = useDispatch();
   const { makeRequest } = useHttpClient();
+  const user = useSelector((state: RootState) => state.user.username);
 
   const openForm = (params: FormParams) => {
     setOpen(true);
@@ -39,7 +41,6 @@ const usePostForm = () => {
   };
 
   const addPost = async () => {
-    const user = "Duc Anh";
     const res = await makeRequest({
       url: "/post",
       method: "post",

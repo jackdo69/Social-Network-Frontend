@@ -7,6 +7,7 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import usePostForm from "../hooks/post-form-hook";
 import { ContainerProps } from '../interfaces';
+import useAuth from '../hooks/auth-hook';
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -20,12 +21,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Layout(props: ContainerProps) {
   const classes = useStyles();
+  const { isLoggedIn } = useAuth();
   const { Form, openForm } = usePostForm();
   return (
     <div>
       <Loading />
       <Toast />
-      <Header />
+      {isLoggedIn() && <Header />}
       {Form}
       <Container maxWidth="xl">
         {props.children}

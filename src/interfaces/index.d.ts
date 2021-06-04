@@ -63,6 +63,12 @@ interface ToastSliceState {
     show?: boolean;
 }
 
+interface UserSliceState {
+    image: string,
+    username: string,
+    email: string;
+}
+
 interface FormParams {
     action: 'add' | 'edit',
     payload?: {
@@ -83,6 +89,7 @@ export {
     AuthRequestData,
     PostSliceState,
     AuthSliceState,
+    UserSliceState,
     LoadingSliceState,
     ToastSliceState,
     FormParams

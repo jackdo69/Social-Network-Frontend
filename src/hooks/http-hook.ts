@@ -3,12 +3,14 @@ import { HttPContent } from '../interfaces';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/index';
 import { toastActions } from '../store/toast';
+import { useHistory } from "react-router-dom";
 
 
 const BASE_URL = "http://localhost:4000";
 const useHttpClient = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
+  const history = useHistory();
   const makeRequest = async (content: HttPContent) => {
     const { url, method, params, data, onUploadProgress, toastMessage } = content;
     const options: AxiosRequestConfig = {
@@ -34,6 +36,9 @@ const useHttpClient = () => {
         severity: 'error',
         message: `${err.response.data.statusCode} - ${err.response.data.message}`
       }));
+      if (err.response.data.statusCode === 401 || err.response.data.statusCode === 403) {
+        history.push('/auth')
+      }
     }
   };
 

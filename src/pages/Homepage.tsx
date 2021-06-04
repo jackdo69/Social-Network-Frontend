@@ -3,17 +3,19 @@ import useHttpClient from "../hooks/http-hook";
 import Layout from '../hoc/Layout';
 import Post from "../components/Post";
 import { AxiosRequestConfig } from 'axios';
-
+import * as jwt from 'jsonwebtoken';
 //Redux area
 import { useSelector, useDispatch } from 'react-redux';
 import { postActions } from '../store/post';
 import { loadingActions } from '../store/loading';
+import { userActions } from '../store/user';
 
 import { RootState } from '../store/index';
 
 const Homepage = () => {
   const dispatch = useDispatch();
   const posts = useSelector((state: RootState) => state.post.posts);
+  const token = useSelector((state: RootState) => state.auth.accessToken);
   const { makeRequest } = useHttpClient();
 
 
@@ -35,8 +37,23 @@ const Homepage = () => {
 
   };
 
+  const getUserInfo = async (userId: string) => {
+    const options: AxiosRequestConfig = {
+      url: `/user/${userId}`,
+      method: 'get'
+    };
+
+    const user = await makeRequest(options);
+    dispatch(userActions.setUser(user));
+  };
+
   //Component Did mount
   useEffect(() => {
+    //Query user info
+    if (token) {
+      const decoded: any = jwt.decode(token);
+      getUserInfo(decoded.userId);
+    }
     //Query the posts
     fetchPosts();
   }, []);

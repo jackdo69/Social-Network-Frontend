@@ -3,6 +3,8 @@ import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import Badge from '@material-ui/core/Badge';
 import Avatar from '@material-ui/core/Avatar';
 import { Theme, makeStyles, withStyles, createStyles } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 const StyledBadge = withStyles((theme: Theme) =>
     createStyles({
@@ -37,13 +39,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function BadgeAvatars() {
     const classes = useStyles();
+    const image = useSelector((state: RootState) => state.user.image);
 
     const handleClick = () => {
         console.log('I was clicked');
 
     };
 
-    const imageSource = 'https://images.unsplash.com/photo-1585831818026-c75edc266a10?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
 
     return (
         <div className={classes.root}>
@@ -60,7 +62,7 @@ export default function BadgeAvatars() {
                 <Avatar
                     className={classes.avatar}
                     alt="Remy Sharp"
-                    src={imageSource} />
+                    src={image} />
             </StyledBadge>
         </div>
     );
