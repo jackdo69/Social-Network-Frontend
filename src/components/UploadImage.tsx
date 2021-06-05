@@ -1,8 +1,9 @@
 import React from "react";
 import useImageService from "../hooks/image-hook";
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { Box, Typography, Button, withStyles, Theme, createStyles } from '@material-ui/core';
+import { Box, Typography, Button, withStyles, Theme, createStyles, makeStyles } from '@material-ui/core';
 import { UploadImagePropsFunction } from '../interfaces';
+import classes from "*.module.css";
 
 const BorderLinearProgress = withStyles((theme: Theme) => createStyles({
   root: {
@@ -15,8 +16,22 @@ const BorderLinearProgress = withStyles((theme: Theme) => createStyles({
   bar: {
     borderRadius: 5,
     backgroundColor: '#1a90ff',
-  },
+  }
+
 }))(LinearProgress);
+
+const useStyles = makeStyles(theme => ({
+  pictureButtons: {
+    display: 'flex',
+    margin: '2em',
+    justifyContent: 'space-evenly'
+  },
+  previewImage: {
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '2em'
+  }
+}));
 
 
 
@@ -25,6 +40,7 @@ const UploadImage: React.FC<UploadImagePropsFunction> = (props: UploadImageProps
   const [progress, setProgress] = React.useState(0);
   const [previewImage, setPreviewImage] = React.useState('');
   const { uploadImage } = useImageService();
+  const classes = useStyles();
 
   const selectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.files instanceof FileList && setImage(event.target.files[0]);
@@ -40,33 +56,35 @@ const UploadImage: React.FC<UploadImagePropsFunction> = (props: UploadImageProps
 
   return (
     <div className="mg20">
-      <label htmlFor="btn-upload">
-        <input
-          id="btn-upload"
-          name="btn-upload"
-          style={{ display: 'none' }}
-          type="file"
-          accept="image/*"
-          onChange={selectFile} />
-        <Button
-          className="btn-choose"
-          variant="outlined"
-          component="span" >
-          Choose Image
+      <div className={classes.pictureButtons}>
+        <label htmlFor="btn-upload">
+          <input
+            id="btn-upload"
+            name="btn-upload"
+            style={{ display: 'none' }}
+            type="file"
+            accept="image/*"
+            onChange={selectFile} />
+          <Button
+            className="btn-choose"
+            variant="contained"
+            component="span" >
+            Choose Image
         </Button>
-      </label>
+        </label>
+        <Button
+          className="btn-upload"
+          color="primary"
+          variant="contained"
+          component="span"
+          disabled={!image}
+          onClick={upload}>
+          Upload Image
+      </Button>
+      </div>
       <div className="file-name">
         {image ? image.name : null}
       </div>
-      <Button
-        className="btn-upload"
-        color="primary"
-        variant="contained"
-        component="span"
-        disabled={!image}
-        onClick={upload}>
-        Upload
-      </Button>
 
       {image && (
         <Box className="my20" display="flex" alignItems="center">
@@ -80,8 +98,8 @@ const UploadImage: React.FC<UploadImagePropsFunction> = (props: UploadImageProps
       }
 
       {previewImage && (
-        <div>
-          <img className="preview my10" width="200px" height="200px" src={previewImage} alt="" />
+        <div className={classes.previewImage}>
+          <img className="preview my10" width="150px" height="150px" src={previewImage} alt="" />
         </div>
       )}
 

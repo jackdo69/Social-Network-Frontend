@@ -44,7 +44,7 @@ const Homepage = () => {
     };
 
     const user = await makeRequest(options);
-    dispatch(userActions.setUser(user));
+    user && dispatch(userActions.setUser({id: userId, ...user}));
   };
 
   //Component Did mount

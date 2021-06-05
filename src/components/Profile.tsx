@@ -5,7 +5,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { Theme, makeStyles, withStyles, createStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-
+import useForm from "../hooks/form-hook";
 const StyledBadge = withStyles((theme: Theme) =>
     createStyles({
         badge: {
@@ -40,15 +40,18 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function BadgeAvatars() {
     const classes = useStyles();
     const image = useSelector((state: RootState) => state.user.image);
+    const { openForm, Form } = useForm();
 
     const handleClick = () => {
         console.log('I was clicked');
-
+        
+        openForm({ action: 'updatePicture' });
     };
 
 
     return (
         <div className={classes.root}>
+            {Form}
             <StyledBadge
                 onClick={handleClick}
                 className={classes.badge}

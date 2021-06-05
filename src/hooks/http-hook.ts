@@ -3,6 +3,7 @@ import { HttPContent } from '../interfaces';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/index';
 import { toastActions } from '../store/toast';
+import useAuth from '../hooks/auth-hook';
 import { useHistory } from "react-router-dom";
 
 
@@ -11,6 +12,7 @@ const useHttpClient = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
   const history = useHistory();
+  const { logout } = useAuth();
   const makeRequest = async (content: HttPContent) => {
     const { url, method, params, data, onUploadProgress, toastMessage } = content;
     const options: AxiosRequestConfig = {
@@ -37,7 +39,8 @@ const useHttpClient = () => {
         message: `${err.response.data.statusCode} - ${err.response.data.message}`
       }));
       if (err.response.data.statusCode === 401 || err.response.data.statusCode === 403) {
-        history.push('/auth')
+        logout();
+        history.push('/auth');
       }
     }
   };

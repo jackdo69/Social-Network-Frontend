@@ -5,7 +5,7 @@ import Loading from '../components/Loading';
 import Toast from '../components/Toast';
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-import usePostForm from "../hooks/post-form-hook";
+import useForm from "../hooks/form-hook";
 import { ContainerProps } from '../interfaces';
 import useAuth from '../hooks/auth-hook';
 
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Layout(props: ContainerProps) {
   const classes = useStyles();
   const { isLoggedIn } = useAuth();
-  const { Form, openForm } = usePostForm();
+  const { Form, openForm } = useForm();
   return (
     <div>
       <Loading />
@@ -36,7 +36,7 @@ export default function Layout(props: ContainerProps) {
         className={classes.fab}
         color="primary"
         aria-label="add"
-        onClick={() => openForm({ action: 'add' })}
+        onClick={() => openForm({ action: 'addPost' })}
       >
         <AddIcon />
       </Fab>

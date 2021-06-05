@@ -12,25 +12,52 @@ import useHttpClient from "./http-hook";
 import { useDispatch } from 'react-redux';
 import { postActions } from '../store/post';
 import { loadingActions } from '../store/loading';
+import { userActions } from '../store/user';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 
 import { FormParams } from '../interfaces';
 
-const usePostForm = () => {
+const useForm = () => {
   const [open, setOpen] = useState(false);
+  const [showDialogContent, setShowDialogContent] = useState(false);
+  const [showUploadImage, setShowUploadImage] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
   const [id, setId] = useState('');
   const [action, setAction] = useState('');
+  const [formTitle, setFormTitle] = useState('');
+  const [formButton, setFormButton] = useState('');
   const dispatch = useDispatch();
   const { makeRequest } = useHttpClient();
-  const user = useSelector((state: RootState) => state.user.username);
+  const username = useSelector((state: RootState) => state.user.username);
+  const userId = useSelector((state: RootState) => state.user.id);
 
   const openForm = (params: FormParams) => {
     setOpen(true);
     setAction(params.action);
+    switch (params.action) {
+      case 'addPost':
+        setFormTitle('Add Post');
+        setFormButton('Add');
+        setShowDialogContent(true);
+        setShowUploadImage(true);
+        break;
+
+      case 'updatePost':
+        setFormTitle('Update Post');
+        setFormButton('Update');
+        setShowDialogContent(true);
+        break;
+
+      case 'updatePicture':
+        setFormTitle('Update Picture');
+        setFormButton('Update');
+        setShowUploadImage(true);
+        break;
+
+    }
     if (params.payload) {
       const post = params.payload;
       setContent(post.content);
@@ -44,7 +71,7 @@ const usePostForm = () => {
     const res = await makeRequest({
       url: "/post",
       method: "post",
-      data: { title, content, image, user },
+      data: { title, content, image, user: username },
       toastMessage: 'Post added successfully!'
     });
     dispatch(postActions.addPost({
@@ -63,7 +90,7 @@ const usePostForm = () => {
       data: { title, content },
       toastMessage: 'Post updated successfully!'
     });
-    dispatch(postActions.editPost({
+    dispatch(postActions.updatePost({
       id, title, content
     }));
     setContent('');
@@ -71,15 +98,30 @@ const usePostForm = () => {
     setImage('');
   };
 
+  const updatePicture = async () => {
+    await makeRequest({
+      url: `/user/${userId}/updateImage`,
+      method: "put",
+      data: { image },
+      toastMessage: 'Image updated successfully!'
+    });
+
+    dispatch(userActions.setImage({ image }));
+  };
+
   const handleSubmit = async () => {
     dispatch(loadingActions.setLoading({ status: true }));
     switch (action) {
-      case 'add':
+      case 'addPost':
         await addPost();
         break;
 
-      case 'edit':
+      case 'updatePost':
         await updatePost();
+        break;
+
+      case 'updatePicture':
+        await updatePicture();
         break;
     }
     dispatch(loadingActions.setLoading({ status: false }));
@@ -93,8 +135,8 @@ const usePostForm = () => {
         onClose={() => setOpen(false)}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">{action === 'add' ? 'Add Post' : 'Edit Post'}</DialogTitle>
-        <DialogContent>
+        <DialogTitle id="form-dialog-title">{formTitle}</DialogTitle>
+        {showDialogContent && <DialogContent>
           <TextField
             onChange={(e) => setTitle(e.target.value)}
             value={title}
@@ -114,14 +156,15 @@ const usePostForm = () => {
             multiline
             fullWidth
           />
-          {action === 'add' && <UploadImage setImage={setImage} />}
-        </DialogContent>
+        </DialogContent>}
+        {showUploadImage && <UploadImage setImage={setImage} />}
+
         <DialogActions>
           <Button onClick={() => setOpen(false)} color="primary">
             Cancel
           </Button>
           <Button onClick={handleSubmit} color="primary">
-            {action === 'add' ? 'Add' : 'Edit'}
+            {formButton}
           </Button>
         </DialogActions>
       </Dialog>
@@ -131,4 +174,4 @@ const usePostForm = () => {
   return { Form, openForm };
 };
 
-export default usePostForm;
+export default useForm;

@@ -22,7 +22,7 @@ import useHttpClient from "../hooks/http-hook";
 import { useDispatch } from 'react-redux';
 import post, { postActions } from '../store/post';
 import { loadingActions } from '../store/loading';
-import usePostForm from "../hooks/post-form-hook";
+import useForm from "../hooks/form-hook";
 
 //Interface
 import { Post } from '../interfaces';
@@ -60,7 +60,7 @@ const RecipeReviewCard = (props: Post) => {
   const open = Boolean(anchorEl);
   const { makeRequest } = useHttpClient();
   const dispatch = useDispatch();
-  const { openForm, Form } = usePostForm();
+  const { openForm, Form } = useForm();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -76,7 +76,7 @@ const RecipeReviewCard = (props: Post) => {
 
   const handleEdit = () => {
     openForm({
-      action: 'edit',
+      action: 'updatePost',
       payload: {
         id: props.id,
         title: props.title,

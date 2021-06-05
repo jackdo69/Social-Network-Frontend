@@ -64,13 +64,14 @@ interface ToastSliceState {
 }
 
 interface UserSliceState {
-    image: string,
-    username: string,
-    email: string;
+    id?: string,
+    image?: string,
+    username?: string,
+    email?: string;
 }
 
 interface FormParams {
-    action: 'add' | 'edit',
+    action: 'addPost' | 'updatePost' | 'updatePicture',
     payload?: {
         id: string,
         content: string,

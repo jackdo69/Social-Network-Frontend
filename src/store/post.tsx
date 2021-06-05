@@ -18,7 +18,7 @@ const postSlice = createSlice({
         removePost(state, action: PayloadAction<{ id: string; }>) {
             if (state.posts.length) state.posts = state.posts.filter(i => i.id !== action.payload.id);
         },
-        editPost(state, action: PayloadAction<{ id: string, content: string, title: string; }>) {
+        updatePost(state, action: PayloadAction<{ id: string, content: string, title: string; }>) {
             const clonePosts = [...state.posts]
             const updatedPost = clonePosts.find(p => p.id === action.payload.id);
             
