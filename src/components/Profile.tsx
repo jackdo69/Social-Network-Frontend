@@ -2,6 +2,7 @@
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import Badge from '@material-ui/core/Badge';
 import Avatar from '@material-ui/core/Avatar';
+import Typography from "@material-ui/core/Typography";
 import { Theme, makeStyles, withStyles, createStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
@@ -40,33 +41,41 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function BadgeAvatars() {
     const classes = useStyles();
     const image = useSelector((state: RootState) => state.user.image);
+    const username = useSelector((state: RootState) => state.user.username);
+    const email = useSelector((state: RootState) => state.user.email);
     const { openForm, Form } = useForm();
 
     const handleClick = () => {
-        console.log('I was clicked');
-        
         openForm({ action: 'updatePicture' });
     };
 
 
     return (
         <div className={classes.root}>
-            {Form}
-            <StyledBadge
-                onClick={handleClick}
-                className={classes.badge}
-                overlap="circle"
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                badgeContent={<EditRoundedIcon />}
-            >
-                <Avatar
-                    className={classes.avatar}
-                    alt="Remy Sharp"
-                    src={image} />
-            </StyledBadge>
+            <div>
+                {Form}
+                <StyledBadge
+                    onClick={handleClick}
+                    className={classes.badge}
+                    overlap="circle"
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    badgeContent={<EditRoundedIcon />}
+                >
+                    <Avatar
+                        className={classes.avatar}
+                        alt="Remy Sharp"
+                        src={image} />
+                </StyledBadge>
+                <Typography variant="h6" color="primary" component="p">
+                    {username}
+                </Typography>
+                <Typography variant="h6" color="secondary" component="p">
+                    {email}
+                </Typography>
+            </div>
         </div>
     );
 }

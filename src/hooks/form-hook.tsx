@@ -71,7 +71,13 @@ const useForm = () => {
     const res = await makeRequest({
       url: "/post",
       method: "post",
-      data: { title, content, image, user: username },
+      data: {
+        title, content, image,
+        user: {
+          id: userId,
+          username: username
+        }
+      },
       toastMessage: 'Post added successfully!'
     });
     dispatch(postActions.addPost({

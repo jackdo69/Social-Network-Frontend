@@ -11,12 +11,26 @@ import { loadingActions } from '../store/loading';
 import { userActions } from '../store/user';
 
 import { RootState } from '../store/index';
+import { Post as PostInterface } from '../interfaces';
 
 const Homepage = () => {
   const dispatch = useDispatch();
   const posts = useSelector((state: RootState) => state.post.posts);
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const { makeRequest } = useHttpClient();
+
+  const removeDuplicateById = (arr: PostInterface[]) => {
+    const idArrs = [];
+    const result = [];
+    for (let i = 0; i < arr.length; i++) {
+      let item = arr[i];
+      if (idArrs.indexOf(item.id) === -1) {
+        idArrs.push(item.id);
+        result.push(item);
+      }
+    }
+    return result;
+  };
 
 
   const fetchPosts = async () => {
@@ -29,6 +43,19 @@ const Homepage = () => {
       }
     };
     const response = await makeRequest(options);
+    const usersByPosts = removeDuplicateById(response.map((item: PostInterface) => item.user));
+    const usersByPostsInfo = await Promise.all(usersByPosts.map(async (item) => {
+      const options: AxiosRequestConfig = {
+        url: `/user/${item.id}`,
+        method: "get"
+      };
+
+      const result = await makeRequest(options);
+      return result;
+    }));
+    dispatch(userActions.setUsersByPosts({ usersByPostsInfo }));
+
+
 
     dispatch(postActions.loadPosts({
       posts: response
@@ -44,7 +71,7 @@ const Homepage = () => {
     };
 
     const user = await makeRequest(options);
-    user && dispatch(userActions.setUser({id: userId, ...user}));
+    user && dispatch(userActions.setUser({ id: userId, ...user }));
   };
 
   //Component Did mount

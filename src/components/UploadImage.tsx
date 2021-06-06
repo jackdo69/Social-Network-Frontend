@@ -3,7 +3,6 @@ import useImageService from "../hooks/image-hook";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Box, Typography, Button, withStyles, Theme, createStyles, makeStyles } from '@material-ui/core';
 import { UploadImagePropsFunction } from '../interfaces';
-import classes from "*.module.css";
 
 const BorderLinearProgress = withStyles((theme: Theme) => createStyles({
   root: {
@@ -30,6 +29,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     margin: '2em'
+  },
+  imageButton: {
+    margin: '1em'
   }
 }));
 
@@ -66,14 +68,15 @@ const UploadImage: React.FC<UploadImagePropsFunction> = (props: UploadImageProps
             accept="image/*"
             onChange={selectFile} />
           <Button
-            className="btn-choose"
+            className={classes.imageButton}
+            color="default"
             variant="contained"
             component="span" >
             Choose Image
         </Button>
         </label>
         <Button
-          className="btn-upload"
+          className={classes.imageButton}
           color="primary"
           variant="contained"
           component="span"

@@ -19,10 +19,11 @@ import Menu from "@material-ui/core/Menu";
 import useHttpClient from "../hooks/http-hook";
 
 //Redux area
-import { useDispatch } from 'react-redux';
-import post, { postActions } from '../store/post';
+import { useDispatch, useSelector } from 'react-redux';
+import { postActions } from '../store/post';
 import { loadingActions } from '../store/loading';
 import useForm from "../hooks/form-hook";
+import { RootState } from '../store';
 
 //Interface
 import { Post } from '../interfaces';
@@ -61,6 +62,9 @@ const RecipeReviewCard = (props: Post) => {
   const { makeRequest } = useHttpClient();
   const dispatch = useDispatch();
   const { openForm, Form } = useForm();
+
+  const usersByPostsInfo = useSelector((state: RootState) => state.user.usersByPosts);
+  const postOwner = usersByPostsInfo?.find((item) => item.username === props.user.username);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -106,16 +110,14 @@ const RecipeReviewCard = (props: Post) => {
       {Form}
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
-          </Avatar>
+          <Avatar aria-label="recipe" className={classes.avatar} src={postOwner.image} />
         }
         action={
           <IconButton onClick={handleMenu} aria-label="settings">
             <MoreVertIcon />
           </IconButton>
         }
-        title={props.user}
+        title={props.user.username}
         subheader={new Date(props.createdAt).toLocaleDateString()}
       />
       <CardMedia

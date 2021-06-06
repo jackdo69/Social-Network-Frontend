@@ -62,15 +62,17 @@ const Auth = () => {
     if (mode === 'register') {
       requestData.email = email;
     }
-    const { accessToken, refreshToken } = await makeRequest({
+    const result = await makeRequest({
       url: `/auth/${mode}`,
       method: 'post',
       data: requestData
     });
 
-    login(accessToken, refreshToken);
-    history.push("/home");
-
+    if (result && result.accessToken && result.refreshToken) {
+      const { accessToken, refreshToken } = result;
+      login(accessToken, refreshToken);
+      history.push("/home");
+    }
   };
 
   return (

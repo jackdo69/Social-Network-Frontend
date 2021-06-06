@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserSliceState } from '../interfaces';
 
-const initialUserSliceState: UserSliceState = { image: '', email: '', username: '', id: '' };
+const initialUserSliceState: UserSliceState = { image: '', email: '', username: '', id: '', usersByPosts: [] };
 
 const userSlice = createSlice({
     name: 'toast',
@@ -15,6 +15,9 @@ const userSlice = createSlice({
         },
         setImage(state, action: PayloadAction<UserSliceState>) {
             state.image = action.payload.image;
+        },
+        setUsersByPosts(state, action: PayloadAction<{ usersByPostsInfo: UserSliceState[]; }>) {
+            state.usersByPosts = action.payload.usersByPostsInfo;
         }
     }
 });

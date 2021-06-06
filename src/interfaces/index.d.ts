@@ -6,7 +6,10 @@ interface Post {
     content: string,
     createdAt: string,
     image: string,
-    user: string,
+    user: {
+        id: string,
+        username: string;
+    },
     title: string;
 }
 
@@ -67,7 +70,8 @@ interface UserSliceState {
     id?: string,
     image?: string,
     username?: string,
-    email?: string;
+    email?: string,
+    usersByPosts?: Array<T>
 }
 
 interface FormParams {
