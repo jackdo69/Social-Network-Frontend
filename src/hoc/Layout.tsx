@@ -38,7 +38,7 @@ const Layout = (props: LayoutProps) => {
                 </Grid>
                 <Grid
                     className={classes.item}
-                    xs={5}
+                    xs={4}
                     item>
                     {props.main}
                 </Grid>

@@ -12,11 +12,12 @@ import { userActions } from '../store/user';
 
 import { RootState } from '../store/index';
 import { Post as PostInterface } from '../interfaces';
+const ACCESS_TOKEN = 'access_token';
 
 const Homepage = () => {
   const dispatch = useDispatch();
   const posts = useSelector((state: RootState) => state.post.posts);
-  const token = useSelector((state: RootState) => state.auth.accessToken);
+  const token = localStorage.getItem(ACCESS_TOKEN);
   const { makeRequest } = useHttpClient();
 
   const removeDuplicateById = (arr: PostInterface[]) => {
@@ -43,23 +44,24 @@ const Homepage = () => {
       }
     };
     const response = await makeRequest(options);
-    const usersByPosts = removeDuplicateById(response.map((item: PostInterface) => item.user));
-    const usersByPostsInfo = await Promise.all(usersByPosts.map(async (item) => {
-      const options: AxiosRequestConfig = {
-        url: `/user/${item.id}`,
-        method: "get"
-      };
 
-      const result = await makeRequest(options);
-      return result;
-    }));
-    dispatch(userActions.setUsersByPosts({ usersByPostsInfo }));
+    if (response) {
+      const usersByPosts = removeDuplicateById(response.map((item: PostInterface) => item.user));
+      const usersByPostsInfo = await Promise.all(usersByPosts.map(async (item) => {
+        const options: AxiosRequestConfig = {
+          url: `/user/${item.id}`,
+          method: "get"
+        };
 
+        const result = await makeRequest(options);
+        return result;
+      }));
+      dispatch(userActions.setUsersByPosts({ usersByPostsInfo }));
 
-
-    dispatch(postActions.loadPosts({
-      posts: response
-    }));
+      dispatch(postActions.loadPosts({
+        posts: response
+      }));
+    }
     dispatch(loadingActions.setLoading({ status: false }));
 
   };

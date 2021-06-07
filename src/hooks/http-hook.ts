@@ -4,15 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/index';
 import { toastActions } from '../store/toast';
 import useAuth from '../hooks/auth-hook';
-import { useHistory } from "react-router-dom";
 
 
 const BASE_URL = "http://localhost:4000";
 const useHttpClient = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
-  const history = useHistory();
-  const { logout } = useAuth();
+  const { renewToken } = useAuth();
   const makeRequest = async (content: HttPContent) => {
     const { url, method, params, data, onUploadProgress, toastMessage } = content;
     const options: AxiosRequestConfig = {
@@ -34,13 +32,13 @@ const useHttpClient = () => {
       }));
       return response.data;
     } catch (err) {
-      dispatch(toastActions.setToast({
-        severity: 'error',
-        message: `${err.response.data.statusCode} - ${err.response.data.message}`
-      }));
       if (err.response.data.statusCode === 401 || err.response.data.statusCode === 403) {
-        logout();
-        history.push('/auth');
+        renewToken();
+      } else {
+        dispatch(toastActions.setToast({
+          severity: 'error',
+          message: `${err.response.data.statusCode} - ${err.response.data.message}`
+        }));
       }
     }
   };
