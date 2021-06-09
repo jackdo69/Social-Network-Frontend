@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Post } from '../interfaces';
-import { PostSliceState } from '../interfaces';
+import { PostSliceState, Post } from '../interfaces';
 
 
 const initialPostState: PostSliceState = { posts: [] };
@@ -19,14 +18,14 @@ const postSlice = createSlice({
             if (state.posts.length) state.posts = state.posts.filter(i => i.id !== action.payload.id);
         },
         updatePost(state, action: PayloadAction<{ id: string, content: string, title: string; }>) {
-            const clonePosts = [...state.posts]
+            const clonePosts = [...state.posts];
             const updatedPost = clonePosts.find(p => p.id === action.payload.id);
-            
+
             if (updatedPost) {
                 updatedPost.content = action.payload.content;
                 updatedPost.title = action.payload.title;
             }
-            state.posts = clonePosts
+            state.posts = clonePosts;
         }
     }
 });

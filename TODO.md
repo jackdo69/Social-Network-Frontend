@@ -10,3 +10,4 @@
 - [x] Build error handling modal
 - [ ] Set up chatting function
 - [ ] Optimize all Material UI code and refactor
+- [ ] Implement TDD for the project

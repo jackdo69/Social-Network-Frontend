@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {
@@ -7,11 +8,14 @@ import {
   Switch,
 } from "react-router-dom";
 import useAuth from './hooks/auth-hook';
+import useInitData from './hooks/init-data-hook';
 import Container from "./hoc/Container";
 //routes
 import Homepage from "./pages/Homepage";
 import User from "./pages/User";
 import Auth from "./pages/Auth";
+import * as jwt from 'jsonwebtoken';
+import { ACCESS_TOKEN } from './constant';
 
 const theme = createMuiTheme({
   palette: {
@@ -24,6 +28,18 @@ const theme = createMuiTheme({
 
 const App = () => {
   const { isLoggedIn } = useAuth();
+  const { fetchPosts, getUserInfo } = useInitData();
+
+  useEffect(() => {
+    console.log(isLoggedIn());
+
+    if (isLoggedIn()) {
+      const token = localStorage.getItem(ACCESS_TOKEN);
+      const decoded: any = jwt.decode(token!);
+      fetchPosts();
+      getUserInfo(decoded.userId);
+    }
+  });
 
 
   const routes = (

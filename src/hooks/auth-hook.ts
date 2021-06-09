@@ -2,16 +2,11 @@
 import { useSelector, useDispatch } from 'react-redux';
 import axios, { AxiosRequestConfig } from "axios";
 import { authActions } from '../store/auth';
-import { RootState } from "../store";
 import { useHistory } from "react-router-dom";
-
-const ACCESS_TOKEN = 'access_token';
-const REFRESH_TOKEN = 'refresh_token';
-const BASE_URL = "http://localhost:4000";
+import { ACCESS_TOKEN, REFRESH_TOKEN, BASE_URL } from '../constant';
 
 const useAuth = () => {
     const dispatch = useDispatch();
-    const token = useSelector((state: RootState) => state.auth.accessToken);
     const history = useHistory();
 
     const login = (accessToken: string, refreshToken: string) => {
@@ -26,7 +21,6 @@ const useAuth = () => {
     };
 
     const isLoggedIn = () => {
-        if (token.length) return true;
         const accessToken = localStorage.getItem(ACCESS_TOKEN);
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
         if (accessToken && refreshToken) {

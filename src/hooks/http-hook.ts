@@ -3,10 +3,10 @@ import { HttPContent } from '../interfaces';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/index';
 import { toastActions } from '../store/toast';
-import useAuth from '../hooks/auth-hook';
+import useAuth from './auth-hook';
+import { BASE_URL } from '../constant';
 
 
-const BASE_URL = "http://localhost:4000";
 const useHttpClient = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
