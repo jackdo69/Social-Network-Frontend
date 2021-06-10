@@ -123,7 +123,7 @@ const RecipeReviewCard = (props: Post) => {
       <CardMedia
         className={classes.media}
         image={props.image}
-        title="Paella dish"
+        title="post picture"
       />
       <Menu
         id="menu-appbar"
