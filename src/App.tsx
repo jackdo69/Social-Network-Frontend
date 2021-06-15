@@ -28,7 +28,7 @@ const theme = createMuiTheme({
 
 const App = () => {
   const { isLoggedIn } = useAuth();
-  const { fetchPosts, getUserInfo } = useInitData();
+  const { fetchPosts, getUserInfo, getFriendsSuggestions } = useInitData();
 
   useEffect(() => {
     console.log(isLoggedIn());
@@ -38,6 +38,7 @@ const App = () => {
       const decoded: any = jwt.decode(token!);
       fetchPosts();
       getUserInfo(decoded.userId);
+      getFriendsSuggestions(decoded.userId);
     }
   });
 

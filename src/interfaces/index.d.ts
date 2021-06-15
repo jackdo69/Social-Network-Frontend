@@ -71,7 +71,11 @@ interface UserSliceState {
     image?: string,
     username?: string,
     email?: string,
-    usersByPosts?: Array<T>
+    usersByPosts?: Array<T>;
+}
+
+interface FriendSliceState {
+    friendSuggestions: Array<T>;
 }
 
 interface FormParams {
@@ -82,6 +86,12 @@ interface FormParams {
         image: string,
         title: string;
     };
+}
+
+interface FriendSuggestion {
+    id: string,
+    username: string,
+    image: string;
 }
 
 export {
@@ -97,5 +107,7 @@ export {
     UserSliceState,
     LoadingSliceState,
     ToastSliceState,
-    FormParams
+    FriendSliceState,
+    FormParams,
+    FriendSuggestion
 };

@@ -13,7 +13,9 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
         },
         sideWrapper: {
-            height: '70vh'
+            height: '73vh',
+            overflow: 'hidden',
+            marginTop: '2.4em'
         }
     }),
 );

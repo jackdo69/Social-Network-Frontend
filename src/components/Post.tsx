@@ -110,7 +110,7 @@ const RecipeReviewCard = (props: Post) => {
       {Form}
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar} src={postOwner.image} />
+          <Avatar aria-label="recipe" className={classes.avatar} src={postOwner?.image || ''} />
         }
         action={
           <IconButton onClick={handleMenu} aria-label="settings">

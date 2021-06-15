@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { postActions } from '../store/post';
 import { loadingActions } from '../store/loading';
 import { userActions } from '../store/user';
+import { friendActions } from '../store/friend';
 import { AxiosRequestConfig } from 'axios';
 
 
@@ -66,8 +67,18 @@ const useInitData = () => {
         user && dispatch(userActions.setUser({ id: userId, ...user }));
     };
 
+    const getFriendsSuggestions = async (userId: string) => {
+        const options: AxiosRequestConfig = {
+            url: `/user/${userId}/getFriendsSuggestions`,
+            method: 'get'
+        };
+
+        const list = await makeRequest(options);
+        list && dispatch(friendActions.setFriendSuggestions({ list }));
+    };
+
     return {
-        fetchPosts, getUserInfo
+        fetchPosts, getUserInfo, getFriendsSuggestions
     };
 };
 

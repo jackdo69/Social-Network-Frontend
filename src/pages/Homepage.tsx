@@ -1,11 +1,12 @@
 import Layout from '../hoc/Layout';
 import Post from "../components/Post";
+import FriendSuggestions from '../components/FriendSuggestions'
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/index';
 
 const Homepage = () => {
   const posts = useSelector((state: RootState) => state.post.posts);
-
+  const friendSuggestions = ( <FriendSuggestions />)
   let fetchedPosts;
   if (posts && posts.length) {
     fetchedPosts = posts.map((post) => {
@@ -15,7 +16,7 @@ const Homepage = () => {
 
   return (
     <Layout
-      leftSideBar={'Friends suggestion'}
+      leftSideBar={friendSuggestions}
       main={fetchedPosts}
       rightSideBar={'Chatbox'}
     />
