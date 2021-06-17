@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PostSliceState, Post } from '../interfaces';
+import { PostSliceState, UserSliceState, Post } from '../interfaces';
 
 
 const initialPostState: PostSliceState = { posts: [] };
@@ -26,6 +26,9 @@ const postSlice = createSlice({
                 updatedPost.title = action.payload.title;
             }
             state.posts = clonePosts;
+        },
+        setUsersByPosts(state, action: PayloadAction<{ usersByPostsInfo: UserSliceState[]; }>) {
+            state.usersByPosts = action.payload.usersByPostsInfo;
         }
     }
 });

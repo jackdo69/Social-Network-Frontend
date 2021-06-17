@@ -48,7 +48,8 @@ interface AuthRequestData {
 }
 
 interface PostSliceState {
-    posts: Post[];
+    posts: Post[],
+    usersByPosts?: Array<T>;
 }
 
 interface AuthSliceState {
@@ -71,7 +72,9 @@ interface UserSliceState {
     image?: string,
     username?: string,
     email?: string,
-    usersByPosts?: Array<T>;
+    friends?: Array<T>,
+    notifications?: Array<T>,
+    requestSent?: Array<T>;
 }
 
 interface FriendSliceState {

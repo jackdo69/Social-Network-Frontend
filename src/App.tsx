@@ -31,8 +31,6 @@ const App = () => {
   const { fetchPosts, getUserInfo, getFriendsSuggestions } = useInitData();
 
   useEffect(() => {
-    console.log(isLoggedIn());
-
     if (isLoggedIn()) {
       const token = localStorage.getItem(ACCESS_TOKEN);
       const decoded: any = jwt.decode(token!);

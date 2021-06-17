@@ -63,7 +63,7 @@ const RecipeReviewCard = (props: Post) => {
   const dispatch = useDispatch();
   const { openForm, Form } = useForm();
 
-  const usersByPostsInfo = useSelector((state: RootState) => state.user.usersByPosts);
+  const usersByPostsInfo = useSelector((state: RootState) => state.post.usersByPosts);
   const postOwner = usersByPostsInfo?.find((item) => item.username === props.user.username);
 
   const handleExpandClick = () => {

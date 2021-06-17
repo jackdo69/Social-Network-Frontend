@@ -47,8 +47,7 @@ const useInitData = () => {
                 const result = await makeRequest(options);
                 return result;
             }));
-            dispatch(userActions.setUsersByPosts({ usersByPostsInfo }));
-
+            dispatch(postActions.setUsersByPosts({ usersByPostsInfo }));
             dispatch(postActions.loadPosts({
                 posts: response
             }));
