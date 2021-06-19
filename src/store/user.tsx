@@ -27,6 +27,9 @@ const userSlice = createSlice({
         setImage(state, action: PayloadAction<UserSliceState>) {
             state.image = action.payload.image;
         },
+        addRequest(state, action: PayloadAction<{ user: { id: string, username: string; }; }>) {
+            if (state.requestSent) state.requestSent.push(action.payload.user);
+        }
 
     }
 });

@@ -88,43 +88,43 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Header = () => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorElProfile, setAnchorElProfile] = React.useState<null | HTMLElement>(null);
   const { logout } = useAuth();
   const history = useHistory();
   const image = useSelector((state: RootState) => state.user.image);
 
 
-  const isMenuOpen = Boolean(anchorEl);
+  const isMenuProfileOpen = Boolean(anchorElProfile);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorElProfile(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleMenuProfileClose = () => {
+    setAnchorElProfile(null);
   };
 
   const signOut = () => {
     logout();
-    handleMenuClose();
+    handleMenuProfileClose();
     history.push('/auth');
   };
 
   const navigateUserPage = () => {
-    handleMenuClose();
+    handleMenuProfileClose();
     history.push('/user');
   };
 
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
+  const menuProfileId = 'profile-menu';
+  const renderMenuProfile = (
     <Menu
-      anchorEl={anchorEl}
+      anchorEl={anchorElProfile}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={menuId}
+      id={menuProfileId}
       keepMounted
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
+      open={isMenuProfileOpen}
+      onClose={handleMenuProfileClose}
     >
       <MenuItem onClick={navigateUserPage}>Profile</MenuItem>
       <MenuItem onClick={signOut}>Sign out</MenuItem>
@@ -172,7 +172,7 @@ const Header = () => {
             <IconButton
               edge="end"
               aria-label="account of current user"
-              aria-controls={menuId}
+              aria-controls={menuProfileId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
@@ -182,7 +182,7 @@ const Header = () => {
           </div>
         </Toolbar>
       </CustomAppBar>
-      {renderMenu}
+      {renderMenuProfile}
     </div>
   );
 };
