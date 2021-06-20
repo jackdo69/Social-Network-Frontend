@@ -8,7 +8,6 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import useForm from "../hooks/form-hook";
 import { ContainerProps } from '../interfaces';
-import useAuth from '../hooks/auth-hook';
 import {AuthContext} from '../context/auth-context'
 
 const useStyles = makeStyles((theme) => ({

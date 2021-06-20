@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,6 +13,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Avatar from '@material-ui/core/Avatar';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import ReplyRequestModal from './ReplyRequestModal';
 import { styled } from '@material-ui/core/styles';
 
 import useAuth from '../hooks/auth-hook';
@@ -89,14 +90,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Header = () => {
   const classes = useStyles();
-  const [anchorElProfile, setAnchorElProfile] = React.useState<null | HTMLElement>(null);
-  const [anchorElNotifications, setAnchorElNotifications] = React.useState<null | HTMLElement>(null);
-  const [anchorElMessages, setAnchorElMessages] = React.useState<null | HTMLElement>(null);
+  const [anchorElProfile, setAnchorElProfile] = useState<null | HTMLElement>(null);
+  const [anchorElNotifications, setAnchorElNotifications] = useState<null | HTMLElement>(null);
+  const [anchorElMessages, setAnchorElMessages] = useState<null | HTMLElement>(null);
   const { logout } = useAuth();
   const history = useHistory();
   const image = useSelector((state: RootState) => state.user.image);
   const authCtx = useContext(AuthContext);
-
+  const notifications = useSelector((state: RootState) => state.user.notifications);
+  const [openRequestModal, setOpenRequestModal] = useState(false);
+  const [requestModalId, setRequestModalId] = useState('');
 
   const isMenuProfileOpen = Boolean(anchorElProfile);
   const isMenuNotificationsOpen = Boolean(anchorElNotifications);
@@ -128,6 +131,16 @@ const Header = () => {
         setAnchorElMessages(null);
         break;
     }
+  };
+
+  const closeRequestModal = () => {
+    setOpenRequestModal(false);
+  };
+
+  const callRequestModal = (id: string) => {
+    setAnchorElNotifications(null);
+    setOpenRequestModal(true);
+    setRequestModalId(id);
   };
 
   const signOut = () => {
@@ -171,7 +184,18 @@ const Header = () => {
       open={isMenuNotificationsOpen}
       onClose={() => handleMenuClose('notifications')}
     >
-      <MenuItem >Notifications Menu</MenuItem>
+      {(notifications && notifications.length) ?
+        notifications.map(not => {
+          return (
+            <MenuItem
+              onClick={() => callRequestModal(not.id)}
+              key={not.id}>
+              <b>{not.username}</b> &nbsp; sent you a friend request!
+            </MenuItem>
+          );
+        }) :
+        <MenuItem>No notificatiosn</MenuItem>
+      }
     </Menu>
   );
 
@@ -223,9 +247,15 @@ const Header = () => {
               </Badge>
             </IconButton>
             <IconButton onClick={(e) => handleMenuOpen(e, 'notifications')} color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
+              {(notifications && notifications.length) ?
+                <Badge badgeContent={notifications.length} color="secondary">
+                  <NotificationsIcon />
+                </Badge> :
+                <Badge color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              }
+
             </IconButton>
             <IconButton
               edge="end"
@@ -240,6 +270,7 @@ const Header = () => {
       {renderMenuProfile}
       {renderMenuNotifications}
       {renderMenuMessages}
+      <ReplyRequestModal id={requestModalId} open={openRequestModal} onClose={closeRequestModal} />
     </div>
   );
 };
