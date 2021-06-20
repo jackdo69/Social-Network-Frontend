@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {
@@ -16,6 +16,7 @@ import User from "./pages/User";
 import Auth from "./pages/Auth";
 import * as jwt from 'jsonwebtoken';
 import { ACCESS_TOKEN } from './constant';
+import { AuthContext } from './context/auth-context';
 
 const theme = createMuiTheme({
   palette: {
@@ -28,9 +29,12 @@ const theme = createMuiTheme({
 
 const App = () => {
   const { isLoggedIn } = useAuth();
+
   const { fetchPosts, getUserInfo, getFriendsSuggestions } = useInitData();
 
   useEffect(() => {
+    console.log('APP COMPONENT RE-RENDER');
+    
     if (isLoggedIn()) {
       const token = localStorage.getItem(ACCESS_TOKEN);
       const decoded: any = jwt.decode(token!);

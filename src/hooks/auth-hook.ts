@@ -1,22 +1,21 @@
 //React redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios, { AxiosRequestConfig } from "axios";
-import { authActions } from '../store/auth';
 import { useHistory } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN, BASE_URL } from '../constant';
+import { useContext } from 'react';
+import { AuthContext } from '../context/auth-context';
 
 const useAuth = () => {
-    const dispatch = useDispatch();
     const history = useHistory();
+    const authCtx = useContext(AuthContext);
 
     const login = (accessToken: string, refreshToken: string) => {
-        dispatch(authActions.login({ accessToken, refreshToken }));
         localStorage.setItem(ACCESS_TOKEN, accessToken);
         localStorage.setItem(REFRESH_TOKEN, refreshToken);
     };
 
     const logout = () => {
-        dispatch(authActions.logout({}));
         localStorage.clear();
     };
 
@@ -24,7 +23,6 @@ const useAuth = () => {
         const accessToken = localStorage.getItem(ACCESS_TOKEN);
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
         if (accessToken && refreshToken) {
-            dispatch(authActions.login({ accessToken, refreshToken }));
             return true;
         }
         return false;
@@ -47,6 +45,8 @@ const useAuth = () => {
             const { accessToken } = response.data;
             login(accessToken, refreshToken!);
         } catch (e) {
+            logout();
+            authCtx.setLoggedIn(false);
             history.push('/auth');
         }
     };

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -11,6 +11,8 @@ import useAuth from '../hooks/auth-hook';
 
 import { useHistory } from "react-router-dom";
 import { AuthRequestData } from '../interfaces';
+import { AuthContext } from '../context/auth-context';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,6 +54,7 @@ const Auth = () => {
   const { login } = useAuth();
   const history = useHistory();
   const { makeRequest } = useHttpClient();
+  const authCtx = useContext(AuthContext)
 
   const closeModal = () => { };
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -71,6 +74,7 @@ const Auth = () => {
     if (result && result.accessToken && result.refreshToken) {
       const { accessToken, refreshToken } = result;
       login(accessToken, refreshToken);
+      authCtx.setLoggedIn(true)
       history.push("/home");
     }
   };

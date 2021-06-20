@@ -1,3 +1,4 @@
+import {useEffect} from 'react'
 import Layout from '../hoc/Layout';
 import Post from "../components/Post";
 import FriendSuggestions from '../components/FriendSuggestions'
@@ -13,7 +14,7 @@ const Homepage = () => {
       return <Post key={post.id} title={post.title} content={post.content} id={post.id} createdAt={post.createdAt} user={post.user} image={post.image} />;
     });
   }
-
+  
   return (
     <Layout
       leftSideBar={friendSuggestions}

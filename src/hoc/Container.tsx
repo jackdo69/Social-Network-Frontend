@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Header from "../components/Header";
@@ -8,6 +9,7 @@ import AddIcon from "@material-ui/icons/Add";
 import useForm from "../hooks/form-hook";
 import { ContainerProps } from '../interfaces';
 import useAuth from '../hooks/auth-hook';
+import {AuthContext} from '../context/auth-context'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -21,13 +23,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Layout(props: ContainerProps) {
   const classes = useStyles();
-  const { isLoggedIn } = useAuth();
   const { Form, openForm } = useForm();
+  const authCtx = useContext(AuthContext)
+  
   return (
     <div>
       <Loading />
       <Toast />
-      {isLoggedIn() && <Header />}
+      {authCtx.loggedIn && <Header />}
       {Form}
       <Container maxWidth="xl">
         {props.children}

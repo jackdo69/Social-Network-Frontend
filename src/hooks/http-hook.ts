@@ -1,14 +1,13 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { HttPContent } from '../interfaces';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store/index';
+import { useDispatch } from 'react-redux';
 import { toastActions } from '../store/toast';
 import useAuth from './auth-hook';
-import { BASE_URL } from '../constant';
+import { BASE_URL, ACCESS_TOKEN } from '../constant';
 
 
 const useHttpClient = () => {
-  const token = useSelector((state: RootState) => state.auth.accessToken);
+  const token = localStorage.getItem(ACCESS_TOKEN);
   const dispatch = useDispatch();
   const { renewToken } = useAuth();
   const makeRequest = async (content: HttPContent) => {

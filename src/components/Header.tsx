@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -19,11 +19,12 @@ import useAuth from '../hooks/auth-hook';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import { AuthContext } from '../context/auth-context';
 
 const CustomAppBar = styled(AppBar)({
   background: 'linear-gradient(45deg, #333399 30%, #3939ac 90%)',
   height: 60
-})
+});
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,33 +90,62 @@ const useStyles = makeStyles((theme: Theme) =>
 const Header = () => {
   const classes = useStyles();
   const [anchorElProfile, setAnchorElProfile] = React.useState<null | HTMLElement>(null);
+  const [anchorElNotifications, setAnchorElNotifications] = React.useState<null | HTMLElement>(null);
+  const [anchorElMessages, setAnchorElMessages] = React.useState<null | HTMLElement>(null);
   const { logout } = useAuth();
   const history = useHistory();
   const image = useSelector((state: RootState) => state.user.image);
+  const authCtx = useContext(AuthContext);
 
 
   const isMenuProfileOpen = Boolean(anchorElProfile);
+  const isMenuNotificationsOpen = Boolean(anchorElNotifications);
+  const isMenuMessagesOpen = Boolean(anchorElMessages);
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElProfile(event.currentTarget);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, type: string) => {
+    switch (type) {
+      case 'profile':
+        setAnchorElProfile(event.currentTarget);
+        break;
+      case 'notifications':
+        setAnchorElNotifications(event.currentTarget);
+        break;
+      case 'messages':
+        setAnchorElMessages(event.currentTarget);
+        break;
+    }
   };
 
-  const handleMenuProfileClose = () => {
-    setAnchorElProfile(null);
+  const handleMenuClose = (type: string) => {
+    switch (type) {
+      case 'profile':
+        setAnchorElProfile(null);
+        break;
+      case 'notifications':
+        setAnchorElNotifications(null);
+        break;
+      case 'messages':
+        setAnchorElMessages(null);
+        break;
+    }
   };
 
   const signOut = () => {
     logout();
-    handleMenuProfileClose();
+    authCtx.setLoggedIn(false);
+    handleMenuClose('profile');
     history.push('/auth');
   };
 
   const navigateUserPage = () => {
-    handleMenuProfileClose();
+    handleMenuClose('profile');
     history.push('/user');
   };
 
   const menuProfileId = 'profile-menu';
+  const menuNotificationsId = 'notifications-menu';
+  const menuMessagesId = 'messages-menu';
+
   const renderMenuProfile = (
     <Menu
       anchorEl={anchorElProfile}
@@ -124,10 +154,38 @@ const Header = () => {
       keepMounted
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuProfileOpen}
-      onClose={handleMenuProfileClose}
+      onClose={() => handleMenuClose('profile')}
     >
       <MenuItem onClick={navigateUserPage}>Profile</MenuItem>
       <MenuItem onClick={signOut}>Sign out</MenuItem>
+    </Menu>
+  );
+
+  const renderMenuNotifications = (
+    <Menu
+      anchorEl={anchorElNotifications}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuNotificationsId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuNotificationsOpen}
+      onClose={() => handleMenuClose('notifications')}
+    >
+      <MenuItem >Notifications Menu</MenuItem>
+    </Menu>
+  );
+
+  const renderMenuMessages = (
+    <Menu
+      anchorEl={anchorElMessages}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuMessagesId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuMessagesOpen}
+      onClose={() => handleMenuClose('messages')}
+    >
+      <MenuItem >Messages Menu</MenuItem>
     </Menu>
   );
 
@@ -159,22 +217,19 @@ const Header = () => {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
+            <IconButton onClick={(e) => handleMenuOpen(e, 'messages')} color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <MailIcon />
               </Badge>
             </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
+            <IconButton onClick={(e) => handleMenuOpen(e, 'notifications')} color="inherit">
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
             <IconButton
               edge="end"
-              aria-label="account of current user"
-              aria-controls={menuProfileId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              onClick={(e) => handleMenuOpen(e, 'profile')}
               color="inherit"
             >
               <Avatar alt="User picture" src={image} />
@@ -183,6 +238,8 @@ const Header = () => {
         </Toolbar>
       </CustomAppBar>
       {renderMenuProfile}
+      {renderMenuNotifications}
+      {renderMenuMessages}
     </div>
   );
 };

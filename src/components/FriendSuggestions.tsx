@@ -78,7 +78,7 @@ const FriendSuggestions = () => {
             <Typography align="center" variant="h5" gutterBottom>Friends Suggestions</Typography>
             {suggestions && suggestions.map((s: Suggestion) => {
                 return (
-                    <CustomPaper variant="outlined">
+                    <CustomPaper key={s.id} variant="outlined">
                         <div className={classes.info}>
                             <Avatar src={s.image} />
                             <Typography variant="overline" display="block" gutterBottom>{s.username}</Typography>
