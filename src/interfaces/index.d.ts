@@ -49,7 +49,6 @@ interface AuthRequestData {
 
 interface PostSliceState {
     posts: Post[],
-    usersByPosts?: Array<T>;
 }
 
 interface AuthSliceState {

@@ -7,6 +7,7 @@ import { Theme, makeStyles, withStyles, createStyles } from '@material-ui/core/s
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import useForm from "../hooks/form-hook";
+
 const StyledBadge = withStyles((theme: Theme) =>
     createStyles({
         badge: {

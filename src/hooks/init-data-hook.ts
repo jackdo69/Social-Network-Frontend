@@ -7,20 +7,6 @@ import { userActions } from '../store/user';
 import { friendActions } from '../store/friend';
 import { AxiosRequestConfig } from 'axios';
 
-
-const removeDuplicateById = (arr: Post[]) => {
-    const idArrs = [];
-    const result = [];
-    for (let i = 0; i < arr.length; i++) {
-        let item = arr[i];
-        if (idArrs.indexOf(item.id) === -1) {
-            idArrs.push(item.id);
-            result.push(item);
-        }
-    }
-    return result;
-};
-
 const useInitData = () => {
     const dispatch = useDispatch();
     const { makeRequest } = useHttpClient();
@@ -36,22 +22,9 @@ const useInitData = () => {
         };
         const response = await makeRequest(options);
 
-        if (response) {
-            const usersByPosts = removeDuplicateById(response.map((item: Post) => item.user));
-            const usersByPostsInfo = await Promise.all(usersByPosts.map(async (item) => {
-                const options: AxiosRequestConfig = {
-                    url: `/user/${item.id}`,
-                    method: "get"
-                };
-
-                const result = await makeRequest(options);
-                return result;
-            }));
-            dispatch(postActions.setUsersByPosts({ usersByPostsInfo }));
-            dispatch(postActions.loadPosts({
-                posts: response
-            }));
-        }
+        dispatch(postActions.loadPosts({
+            posts: response
+        }));
         dispatch(loadingActions.setLoading({ status: false }));
 
     };

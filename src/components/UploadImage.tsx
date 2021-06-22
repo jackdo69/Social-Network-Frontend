@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const UploadImage: React.FC<UploadImagePropsFunction> = (props: UploadImagePropsFunction) => {
+export default function UploadImage(props: UploadImagePropsFunction) {
   const [image, setImage] = React.useState<File>();
   const [progress, setProgress] = React.useState(0);
   const [previewImage, setPreviewImage] = React.useState('');
@@ -109,5 +109,3 @@ const UploadImage: React.FC<UploadImagePropsFunction> = (props: UploadImageProps
     </div >
   );
 };
-
-export default UploadImage;

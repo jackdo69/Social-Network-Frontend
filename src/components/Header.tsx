@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Header = () => {
+export default function Header() {
   const classes = useStyles();
   const [anchorElProfile, setAnchorElProfile] = useState<null | HTMLElement>(null);
   const [anchorElNotifications, setAnchorElNotifications] = useState<null | HTMLElement>(null);
@@ -274,5 +274,3 @@ const Header = () => {
     </div>
   );
 };
-
-export default Header;

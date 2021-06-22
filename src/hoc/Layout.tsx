@@ -29,11 +29,12 @@ const useStyles = makeStyles((theme: Theme) =>
             top: theme.spacing(10),
             right: theme.spacing(10),
             position: 'fixed',
+            padding: '1em'
         }
     }),
 );
 
-const Layout = (props: LayoutProps) => {
+export default function Layout(props: LayoutProps) {
     const classes = useStyles();
 
     return (
@@ -69,5 +70,3 @@ const Layout = (props: LayoutProps) => {
         </div>
     );
 };
-
-export default Layout;

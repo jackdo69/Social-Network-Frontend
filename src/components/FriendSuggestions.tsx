@@ -34,7 +34,7 @@ interface Suggestion {
     isSent: boolean;
 }
 
-const FriendSuggestions = () => {
+export default function FriendSuggestions() {
     const [suggestions, setSuggestions] = useState<Suggestion[] | []>([]);
     const classes = useStyles();
     const { makeRequest } = useHttpClient();
@@ -92,5 +92,3 @@ const FriendSuggestions = () => {
         </div>
     );
 };
-
-export default FriendSuggestions;

@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-const Loading = () => {
+export default function Loading() {
   const dispatch = useDispatch();
   const classes = useStyles();
   const status = useSelector((state: RootState) => state.loading.show);
@@ -30,4 +30,3 @@ const Loading = () => {
 
 };
 
-export default Loading;

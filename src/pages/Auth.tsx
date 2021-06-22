@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const Auth = () => {
+export default function Auth() {
   const classes = useStyles();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -54,7 +54,7 @@ const Auth = () => {
   const { login } = useAuth();
   const history = useHistory();
   const { makeRequest } = useHttpClient();
-  const authCtx = useContext(AuthContext)
+  const authCtx = useContext(AuthContext);
 
   const closeModal = () => { };
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -74,7 +74,7 @@ const Auth = () => {
     if (result && result.accessToken && result.refreshToken) {
       const { accessToken, refreshToken } = result;
       login(accessToken, refreshToken);
-      authCtx.setLoggedIn(true)
+      authCtx.setLoggedIn(true);
       history.push("/home");
     }
   };
@@ -126,5 +126,3 @@ const Auth = () => {
     </Dialog>
   );
 };
-
-export default Auth;

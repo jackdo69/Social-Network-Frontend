@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
 import Layout from '../hoc/Layout';
 import Profile from '../components/Profile';
 
-const User = () => {
+export default function User() {
     const profile = (
         <Profile />
     );
@@ -14,5 +13,3 @@ const User = () => {
         />
     );
 };
-
-export default User;
