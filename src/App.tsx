@@ -20,7 +20,7 @@ import { ACCESS_TOKEN } from './constant';
 const theme = createMuiTheme({
   palette: {
     background: {
-      default: "#fafafa"
+      default: "#dee7f5"
     }
   }
 });

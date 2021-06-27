@@ -5,10 +5,14 @@ import { useHistory } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN, BASE_URL } from '../constant';
 import { useContext } from 'react';
 import { AuthContext } from '../context/auth-context';
+import { userActions } from '../store/user'
+import { postActions } from '../store/post'
+import { friendActions } from '../store/friend';
 
 const useAuth = () => {
     const history = useHistory();
     const authCtx = useContext(AuthContext);
+    const dispatch = useDispatch()
 
     const login = (accessToken: string, refreshToken: string) => {
         localStorage.setItem(ACCESS_TOKEN, accessToken);
@@ -17,6 +21,19 @@ const useAuth = () => {
 
     const logout = () => {
         localStorage.clear();
+        dispatch(userActions.setUser({
+            image: '',
+            email: '',
+            username: '',
+            id: '',
+            friends: [],
+            notifications: [],
+            requestSent: []
+        }))
+        dispatch(postActions.loadPosts({
+            posts: []
+        }));
+        dispatch(friendActions.setFriendSuggestions({ list: [] }));
     };
 
     const isLoggedIn = () => {

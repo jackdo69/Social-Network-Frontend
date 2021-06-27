@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PostSliceState, UserSliceState, Post } from '../interfaces';
+import { PostSliceState, Post } from '../interfaces';
 
 
 const initialPostState: PostSliceState = { posts: [] };
