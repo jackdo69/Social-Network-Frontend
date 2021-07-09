@@ -1,20 +1,19 @@
-import { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
 
-import useHttpClient from "../hooks/http-hook";
+import useHttpClient from '../hooks/http-hook';
 import useAuth from '../hooks/auth-hook';
 
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import { AuthRequestData } from '../interfaces';
 import { AuthContext } from '../context/auth-context';
 
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -33,17 +32,15 @@ const useStyles = makeStyles(theme => ({
   switchMode: {
     display: 'flex',
     justifyContent: 'center',
-    marginBottom: '0.3em'
+    marginBottom: '0.3em',
   },
   anchor: {
     color: 'blue',
     textDecoration: 'underline',
     marginLeft: '0.1em',
-    cursor: 'pointer'
-  }
+    cursor: 'pointer',
+  },
 }));
-
-
 
 export default function Auth() {
   const classes = useStyles();
@@ -56,26 +53,28 @@ export default function Auth() {
   const { makeRequest } = useHttpClient();
   const authCtx = useContext(AuthContext);
 
-  const closeModal = () => { };
+  const closeModal = () => {
+    console.log('close modal');
+  };
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     let mode;
-    isLogin ? mode = 'login' : mode = 'register';
-    let requestData: AuthRequestData = { username, password };
+    isLogin ? (mode = 'login') : (mode = 'register');
+    const requestData: AuthRequestData = { username, password };
     if (mode === 'register') {
       requestData.email = email;
     }
     const result = await makeRequest({
       url: `/auth/${mode}`,
       method: 'post',
-      data: requestData
+      data: requestData,
     });
 
     if (result && result.accessToken && result.refreshToken) {
       const { accessToken, refreshToken } = result;
       login(accessToken, refreshToken);
       authCtx.setLoggedIn(true);
-      history.push("/home");
+      history.push('/home');
     }
   };
 
@@ -83,34 +82,36 @@ export default function Auth() {
     <Dialog open={true} onClose={closeModal}>
       <DialogTitle id="form-dialog-title">{isLogin ? 'Login' : 'Register'}</DialogTitle>
       <DialogContent>
-        <form onSubmit={handleSubmit} className={classes.root} >
+        <form onSubmit={handleSubmit} className={classes.root}>
           <TextField
             label="Username"
             variant="filled"
             required
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
-          {!isLogin && <TextField
-            label="Email"
-            variant="filled"
-            type="email"
-            required
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />}
+          {!isLogin && (
+            <TextField
+              label="Email"
+              variant="filled"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          )}
           <TextField
             label="Password"
             variant="filled"
             type="password"
             required
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <div>
             <Button variant="contained" onClick={closeModal}>
               Cancel
-        </Button>
+            </Button>
             <Button type="submit" variant="contained" color="primary">
               {isLogin ? 'Login' : 'Register'}
             </Button>
@@ -118,11 +119,14 @@ export default function Auth() {
         </form>
         <div className={classes.switchMode}>
           <Typography variant={'body1'}>
-            {isLogin ? "Haven't got an account yet?" : "Click here to return to login!"}
-            <a className={classes.anchor} onClick={() => setIsLogin(!isLogin)}> {isLogin ? ' Register' : ' Login'} </a>
+            {isLogin ? "Haven't got an account yet?" : 'Click here to return to login!'}
+            <a className={classes.anchor} onClick={() => setIsLogin(!isLogin)}>
+              {' '}
+              {isLogin ? ' Register' : ' Login'}{' '}
+            </a>
           </Typography>
         </div>
       </DialogContent>
     </Dialog>
   );
-};
+}

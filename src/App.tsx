@@ -1,30 +1,24 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import CssBaseline from "@material-ui/core/CssBaseline";
-import {
-  BrowserRouter,
-  Route,
-  Redirect,
-  Switch,
-} from "react-router-dom";
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import useAuth from './hooks/auth-hook';
 import useInitData from './hooks/init-data-hook';
-import Container from "./hoc/Container";
+import Container from './hoc/Container';
 //routes
-import Homepage from "./pages/Homepage";
-import User from "./pages/User";
-import Auth from "./pages/Auth";
+import Homepage from './pages/Homepage';
+import User from './pages/User';
+import Auth from './pages/Auth';
 import * as jwt from 'jsonwebtoken';
 import { ACCESS_TOKEN } from './constant';
 
 const theme = createMuiTheme({
   palette: {
     background: {
-      default: "#dee7f5"
-    }
-  }
+      default: '#dee7f5',
+    },
+  },
 });
-
 
 export default function App() {
   const { isLoggedIn } = useAuth();
@@ -40,7 +34,6 @@ export default function App() {
       getFriendsSuggestions(decoded.userId);
     }
   });
-
 
   const routes = (
     <Switch>
@@ -59,6 +52,4 @@ export default function App() {
       </BrowserRouter>
     </MuiThemeProvider>
   );
-
-
-};
+}

@@ -11,5 +11,5 @@ ReactDOM.render(
       <App />
     </AuthProvider>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

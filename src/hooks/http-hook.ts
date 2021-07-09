@@ -1,10 +1,9 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from 'axios';
 import { HttPContent } from '../interfaces';
 import { useDispatch } from 'react-redux';
 import { toastActions } from '../store/toast';
 import useAuth from './auth-hook';
 import { BASE_URL, ACCESS_TOKEN } from '../constant';
-
 
 const useHttpClient = () => {
   const token = localStorage.getItem(ACCESS_TOKEN);
@@ -19,25 +18,33 @@ const useHttpClient = () => {
 
     if (data) options.data = data;
     if (params) options.params = params;
-    if (token && token.length) options.headers = {
-      'Authorization': `Bearer ${token}`
-    };
+    if (token && token.length)
+      options.headers = {
+        Authorization: `Bearer ${token}`,
+      };
     if (onUploadProgress) options.onUploadProgress = onUploadProgress;
     try {
       const response = await axios(options);
-      toastMessage && dispatch(toastActions.setToast({
-        severity: 'success',
-        message: `${toastMessage}`
-      }));
+      toastMessage &&
+        dispatch(
+          toastActions.setToast({
+            severity: 'success',
+            message: `${toastMessage}`,
+          }),
+        );
       return response.data;
     } catch (err) {
+      console.log(err);
+
       if (err.response.data.statusCode === 401 || err.response.data.statusCode === 403) {
         renewToken();
       } else {
-        dispatch(toastActions.setToast({
-          severity: 'error',
-          message: `${err.response.data.statusCode} - ${err.response.data.message}`
-        }));
+        dispatch(
+          toastActions.setToast({
+            severity: 'error',
+            message: `${err.response.data.statusCode} - ${err.response.data.message}`,
+          }),
+        );
       }
     }
   };
@@ -46,4 +53,3 @@ const useHttpClient = () => {
 };
 
 export default useHttpClient;
-

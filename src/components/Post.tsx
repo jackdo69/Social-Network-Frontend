@@ -1,56 +1,56 @@
-import { useEffect, useState } from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import useHttpClient from "../hooks/http-hook";
+import React, { useEffect, useState } from 'react';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import useHttpClient from '../hooks/http-hook';
 
 //Redux area
 import { useDispatch } from 'react-redux';
 import { postActions } from '../store/post';
 import { loadingActions } from '../store/loading';
-import useForm from "../hooks/form-hook";
+import useForm from '../hooks/form-hook';
 
 //Interface
 import { Post } from '../interfaces';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    maxWidth: "70vw",
-    margin: '2em auto'
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%", // 16:9
-  },
-  expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: "rotate(180deg)",
-  },
-  avatar: {
-    backgroundColor: '#fafafa',
-  },
-}));
-
-
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      maxWidth: '70vw',
+      margin: '2em auto',
+    },
+    media: {
+      height: 0,
+      paddingTop: '56.25%', // 16:9
+    },
+    expand: {
+      transform: 'rotate(0deg)',
+      marginLeft: 'auto',
+      transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+      }),
+    },
+    expandOpen: {
+      transform: 'rotate(180deg)',
+    },
+    avatar: {
+      backgroundColor: '#fafafa',
+    },
+  }),
+);
 
 export default function RecipeReviewCard(props: Post) {
   const classes = useStyles();
@@ -65,15 +65,13 @@ export default function RecipeReviewCard(props: Post) {
   const getUserImage = async () => {
     const result = await makeRequest({
       url: `/user/${props.user.id}/getUserImage`,
-      method: "get",
+      method: 'get',
     });
-    setImage(result)
-
+    setImage(result);
   };
 
   useEffect(() => {
     getUserImage();
-
   }, []);
 
   const handleExpandClick = () => {
@@ -95,8 +93,8 @@ export default function RecipeReviewCard(props: Post) {
         id: props.id,
         title: props.title,
         content: props.content,
-        image: props.image
-      }
+        image: props.image,
+      },
     });
     setAnchorEl(null);
   };
@@ -105,8 +103,8 @@ export default function RecipeReviewCard(props: Post) {
     dispatch(loadingActions.setLoading({ status: true }));
     await makeRequest({
       url: `/post/${props.id}`,
-      method: "delete",
-      toastMessage: 'Post deleted successfully!'
+      method: 'delete',
+      toastMessage: 'Post deleted successfully!',
     });
 
     dispatch(postActions.removePost({ id: props.id }));
@@ -119,9 +117,7 @@ export default function RecipeReviewCard(props: Post) {
     <Card className={classes.root}>
       {Form}
       <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar} src={image} />
-        }
+        avatar={<Avatar aria-label="recipe" className={classes.avatar} src={image} />}
         action={
           <IconButton onClick={handleMenu} aria-label="settings">
             <MoreVertIcon />
@@ -130,22 +126,18 @@ export default function RecipeReviewCard(props: Post) {
         title={props.user.username}
         subheader={new Date(props.createdAt).toLocaleDateString()}
       />
-      <CardMedia
-        className={classes.media}
-        image={props.image}
-        title="post picture"
-      />
+      <CardMedia className={classes.media} image={props.image} title="post picture" />
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         keepMounted
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         open={open}
         onClose={handleClose}
@@ -181,5 +173,4 @@ export default function RecipeReviewCard(props: Post) {
       </CardActions>
     </Card>
   );
-};
-
+}

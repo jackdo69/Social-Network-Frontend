@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -24,14 +24,14 @@ import { AuthContext } from '../context/auth-context';
 
 const CustomAppBar = styled(AppBar)({
   background: 'linear-gradient(45deg, #333399 30%, #3939ac 90%)',
-  height: 60
+  height: 60,
 });
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     grow: {
       flexGrow: 1,
-      minHeight: 36
+      minHeight: 36,
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -184,18 +184,17 @@ export default function Header() {
       open={isMenuNotificationsOpen}
       onClose={() => handleMenuClose('notifications')}
     >
-      {(notifications && notifications.length) ?
-        notifications.map(not => {
+      {notifications && notifications.length ? (
+        notifications.map((not) => {
           return (
-            <MenuItem
-              onClick={() => callRequestModal(not.id)}
-              key={not.id}>
+            <MenuItem onClick={() => callRequestModal(not.id)} key={not.id}>
               <b>{not.username}</b> &nbsp; sent you a friend request!
             </MenuItem>
           );
-        }) :
+        })
+      ) : (
         <MenuItem>No notificatiosn</MenuItem>
-      }
+      )}
     </Menu>
   );
 
@@ -209,7 +208,7 @@ export default function Header() {
       open={isMenuMessagesOpen}
       onClose={() => handleMenuClose('messages')}
     >
-      <MenuItem >Messages Menu</MenuItem>
+      <MenuItem>Messages Menu</MenuItem>
     </Menu>
   );
 
@@ -217,15 +216,12 @@ export default function Header() {
     <div className={classes.grow}>
       <CustomAppBar position="fixed">
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="open drawer">
             <MenuIcon />
           </IconButton>
-          <Button onClick={() => history.push('/home')} color="inherit"><h2>Social Network</h2></Button>
+          <Button onClick={() => history.push('/home')} color="inherit">
+            <h2>Social Network</h2>
+          </Button>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -247,21 +243,17 @@ export default function Header() {
               </Badge>
             </IconButton>
             <IconButton onClick={(e) => handleMenuOpen(e, 'notifications')} color="inherit">
-              {(notifications && notifications.length) ?
+              {notifications && notifications.length ? (
                 <Badge badgeContent={notifications.length} color="secondary">
                   <NotificationsIcon />
-                </Badge> :
+                </Badge>
+              ) : (
                 <Badge color="secondary">
                   <NotificationsIcon />
                 </Badge>
-              }
-
+              )}
             </IconButton>
-            <IconButton
-              edge="end"
-              onClick={(e) => handleMenuOpen(e, 'profile')}
-              color="inherit"
-            >
+            <IconButton edge="end" onClick={(e) => handleMenuOpen(e, 'profile')} color="inherit">
               <Avatar alt="User picture" src={image} />
             </IconButton>
           </div>
@@ -273,4 +265,4 @@ export default function Header() {
       <ReplyRequestModal id={requestModalId} open={openRequestModal} onClose={closeRequestModal} />
     </div>
   );
-};
+}

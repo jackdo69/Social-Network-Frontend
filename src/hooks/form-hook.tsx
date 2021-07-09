@@ -1,12 +1,12 @@
-import { useState } from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import UploadImage from "../components/UploadImage";
-import useHttpClient from "./http-hook";
+import React, { useState } from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import UploadImage from '../components/UploadImage';
+import useHttpClient from './http-hook';
 
 //Redux area
 import { useDispatch } from 'react-redux';
@@ -22,9 +22,9 @@ const useForm = () => {
   const [open, setOpen] = useState(false);
   const [showDialogContent, setShowDialogContent] = useState(false);
   const [showUploadImage, setShowUploadImage] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [image, setImage] = useState('');
   const [id, setId] = useState('');
   const [action, setAction] = useState('');
   const [formTitle, setFormTitle] = useState('');
@@ -56,7 +56,6 @@ const useForm = () => {
         setFormButton('Update');
         setShowUploadImage(true);
         break;
-
     }
     if (params.payload) {
       const post = params.payload;
@@ -69,20 +68,24 @@ const useForm = () => {
 
   const addPost = async () => {
     const res = await makeRequest({
-      url: "/post",
-      method: "post",
+      url: '/post',
+      method: 'post',
       data: {
-        title, content, image,
+        title,
+        content,
+        image,
         user: {
           id: userId,
-          username: username
-        }
+          username: username,
+        },
       },
-      toastMessage: 'Post added successfully!'
+      toastMessage: 'Post added successfully!',
     });
-    dispatch(postActions.addPost({
-      post: res.result
-    }));
+    dispatch(
+      postActions.addPost({
+        post: res.result,
+      }),
+    );
 
     setContent('');
     setTitle('');
@@ -92,13 +95,17 @@ const useForm = () => {
   const updatePost = async () => {
     await makeRequest({
       url: `/post/${id}`,
-      method: "put",
+      method: 'put',
       data: { title, content },
-      toastMessage: 'Post updated successfully!'
+      toastMessage: 'Post updated successfully!',
     });
-    dispatch(postActions.updatePost({
-      id, title, content
-    }));
+    dispatch(
+      postActions.updatePost({
+        id,
+        title,
+        content,
+      }),
+    );
     setContent('');
     setTitle('');
     setImage('');
@@ -107,9 +114,9 @@ const useForm = () => {
   const updatePicture = async () => {
     await makeRequest({
       url: `/user/${userId}/updateImage`,
-      method: "put",
+      method: 'put',
       data: { image },
-      toastMessage: 'Image updated successfully!'
+      toastMessage: 'Image updated successfully!',
     });
 
     dispatch(userActions.setImage({ image }));
@@ -136,33 +143,31 @@ const useForm = () => {
 
   const Form = (
     <div>
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="form-dialog-title"
-      >
+      <Dialog open={open} onClose={() => setOpen(false)} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{formTitle}</DialogTitle>
-        {showDialogContent && <DialogContent>
-          <TextField
-            onChange={(e) => setTitle(e.target.value)}
-            value={title}
-            required
-            autoFocus
-            margin="dense"
-            id="title"
-            label="Title"
-            fullWidth
-          />
-          <TextField
-            onChange={(e) => setContent(e.target.value)}
-            value={content}
-            id="content"
-            label="content"
-            placeholder="Placeholder"
-            multiline
-            fullWidth
-          />
-        </DialogContent>}
+        {showDialogContent && (
+          <DialogContent>
+            <TextField
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+              required
+              autoFocus
+              margin="dense"
+              id="title"
+              label="Title"
+              fullWidth
+            />
+            <TextField
+              onChange={(e) => setContent(e.target.value)}
+              value={content}
+              id="content"
+              label="content"
+              placeholder="Placeholder"
+              multiline
+              fullWidth
+            />
+          </DialogContent>
+        )}
         {showUploadImage && <UploadImage setImage={setImage} />}
 
         <DialogActions>
