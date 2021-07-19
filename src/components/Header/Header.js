@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, InputBase, Menu, MenuItem, Fab, Link } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, InputBase, Menu, MenuItem, Fab } from '@material-ui/core';
 import {
   Menu as MenuIcon,
   MailOutline as MailIcon,
@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import useStyles from './styles';
 
 // components
-import { Badge, Typography, Button } from '../Wrappers';
+import { Badge, Typography } from '../Wrappers';
 import Notification from '../Notification/Notification';
 import UserAvatar from '../UserAvatar/UserAvatar';
 
@@ -116,18 +116,9 @@ export default function Header(props) {
           )}
         </IconButton>
         <Typography variant="h6" weight="medium" className={classes.logotype}>
-          React Material Admin
+          Social Network
         </Typography>
         <div className={classes.grow} />
-        <Button
-          component={Link}
-          href="https://flatlogic.com/templates/react-material-admin-full"
-          variant={'outlined'}
-          color={'secondary'}
-          className={classes.purchaseBtn}
-        >
-          Unlock full version
-        </Button>
         <div
           className={classNames(classes.search, {
             [classes.searchFocused]: isSearchOpen,
