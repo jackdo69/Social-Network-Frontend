@@ -1,0 +1,20 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
+
+import theme from './themes';
+import App from './components/App';
+import { LayoutProvider } from './context/LayoutContext';
+import { UserProvider } from './context/UserContext';
+ReactDOM.render(
+  <LayoutProvider>
+    <UserProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </UserProvider>
+  </LayoutProvider>,
+  document.getElementById('root'),
+);
