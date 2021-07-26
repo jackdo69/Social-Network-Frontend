@@ -37,7 +37,9 @@ function Login(props: Props) {
     <Grid container className={classes.container}>
       <div className={classes.logotypeContainer}>
         <img src={logo} alt="logo" className={classes.logotypeImage} />
-        <Typography className={classes.logotypeText}>Material Admin</Typography>
+        <Typography weight="medium" size="xxxl" className={classes.logotypeText}>
+          Social Network
+        </Typography>
       </div>
       <div className={classes.formContainer}>
         <div className={classes.form}>
@@ -65,7 +67,7 @@ function Login(props: Props) {
                 <Typography className={classes.formDividerWord}>or</Typography>
                 <div className={classes.formDivider} />
               </div>
-              <Fade in={error!}>
+              <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
                   Something is wrong with your login or password :(
                 </Typography>
@@ -130,7 +132,7 @@ function Login(props: Props) {
               <Typography constiant="h2" className={classes.subGreeting}>
                 Create your account
               </Typography>
-              <Fade in={error!}>
+              <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
                   Something is wrong with your login or password :(
                 </Typography>
@@ -212,16 +214,16 @@ function Login(props: Props) {
           )}
         </div>
         <Typography color="primary" className={classes.copyright}>
-          © 2014-{new Date().getFullYear()}{' '}
+          © {new Date().getFullYear()}{' '}
           <a
             style={{ textDecoration: 'none', color: 'inherit' }}
-            href="https://flatlogic.com"
+            href="https://jackdo.me"
             rel="noopener noreferrer"
             target="_blank"
           >
-            Flatlogic
+            Jack Do.
           </a>
-          , LLC. All rights reserved.
+          All rights reserved.
         </Typography>
       </div>
     </Grid>

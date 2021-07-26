@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Route, Switch, Redirect, RouteComponentProps } from 'react-router-dom';
+import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 // components
 import Layout from './Layout/Layout';
 
@@ -7,12 +7,12 @@ import Layout from './Layout/Layout';
 import Error from '../pages/error/Error';
 import Login from '../pages/login/Login';
 
-// context
-import { useUserState } from '../context/UserContext';
+// hook
+import useAuth from '../hooks/auth-hook';
 
 export default function App() {
   // global
-  const userState = useUserState();
+  const { isLoggedIn } = useAuth();
 
   return (
     <HashRouter>
@@ -38,7 +38,7 @@ export default function App() {
       <Route
         {...rest}
         render={(props: any) =>
-          userState!.isAuthenticated ? (
+          isLoggedIn() ? (
             React.createElement(component, props)
           ) : (
             <Redirect
@@ -60,7 +60,7 @@ export default function App() {
       <Route
         {...rest}
         render={(props: any) =>
-          userState!.isAuthenticated ? (
+          isLoggedIn() ? (
             <Redirect
               to={{
                 pathname: '/',

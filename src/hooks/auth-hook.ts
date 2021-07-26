@@ -3,15 +3,12 @@ import { useDispatch } from 'react-redux';
 import axios, { AxiosRequestConfig } from 'axios';
 import { useHistory } from 'react-router-dom';
 import { ACCESS_TOKEN, REFRESH_TOKEN, BASE_URL } from '../constants';
-import { useContext } from 'react';
-import { AuthContext } from '../context/auth-context';
 import { userActions } from '../store/user';
 import { postActions } from '../store/post';
 import { friendActions } from '../store/friend';
 
 const useAuth = () => {
   const history = useHistory();
-  const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
 
   const login = (accessToken: string, refreshToken: string) => {
@@ -67,7 +64,6 @@ const useAuth = () => {
       refreshToken && login(accessToken, refreshToken);
     } catch (e) {
       logout();
-      authCtx.setLoggedIn(false);
       history.push('/auth');
     }
   };

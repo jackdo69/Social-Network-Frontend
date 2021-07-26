@@ -10,6 +10,7 @@ import {
   ArrowBack as ArrowBackIcon,
 } from '@material-ui/icons';
 import classNames from 'classnames';
+import { useHistory } from 'react-router-dom';
 
 // styles
 import useStyles from './styles';
@@ -21,8 +22,11 @@ import UserAvatar from '../UserAvatar/UserAvatar';
 
 // context
 import { useLayoutState, useLayoutDispatch, toggleSidebar } from '../../context/LayoutContext';
-import { useUserDispatch, signOut } from '../../context/UserContext';
+import { useUserDispatch } from '../../context/UserContext';
 import { RouteComponentProps } from 'react-router-dom';
+
+//hooks
+import useAuth from '../../hooks/auth-hook';
 
 interface Message {
   id: number;
@@ -107,6 +111,14 @@ export default function Header(props: { history: RouteComponentProps['history'] 
   const [isNotificationsUnread, setIsNotificationsUnread] = useState(true);
   const [profileMenu, setProfileMenu] = useState<ElementMenu>(null);
   const [isSearchOpen, setSearchOpen] = useState(false);
+
+  const { logout } = useAuth();
+  const history = useHistory();
+
+  const signout = () => {
+    logout();
+    history.push('/login');
+  };
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
@@ -278,11 +290,7 @@ export default function Header(props: { history: RouteComponentProps['history'] 
             <AccountIcon className={classes.profileMenuIcon} /> Messages
           </MenuItem>
           <div className={classes.profileMenuUser}>
-            <Typography
-              className={classes.profileMenuLink}
-              color="primary"
-              onClick={() => signOut(userDispatch!, props.history)}
-            >
+            <Typography className={classes.profileMenuLink} color="primary" onClick={signout}>
               Sign Out
             </Typography>
           </div>

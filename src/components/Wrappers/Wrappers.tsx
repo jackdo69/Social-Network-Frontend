@@ -194,6 +194,9 @@ function getFontSize<T extends Theme, V extends Variant>(size: string, variant: 
     case 'xxl':
       multiplier = 3;
       break;
+    case 'xxxl':
+      multiplier = 4;
+      break;
     default:
       multiplier = 1;
       break;
