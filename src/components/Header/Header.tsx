@@ -22,7 +22,6 @@ import UserAvatar from '../UserAvatar/UserAvatar';
 
 // context
 import { useLayoutState, useLayoutDispatch, toggleSidebar } from '../../context/LayoutContext';
-import { useUserDispatch } from '../../context/UserContext';
 import { RouteComponentProps } from 'react-router-dom';
 
 //hooks
@@ -102,7 +101,6 @@ export default function Header(props: { history: RouteComponentProps['history'] 
   // global
   const layoutState = useLayoutState();
   const layoutDispatch = useLayoutDispatch();
-  const userDispatch = useUserDispatch();
 
   // local
   const [mailMenu, setMailMenu] = useState<ElementMenu>(null);
@@ -142,7 +140,7 @@ export default function Header(props: { history: RouteComponentProps['history'] 
             />
           )}
         </IconButton>
-        <Typography variant="h6" weight="medium" className={classes.logotype}>
+        <Typography size="xl" variant="h6" weight="medium" className={classes.logotype}>
           Social Network
         </Typography>
         <div className={classes.grow} />

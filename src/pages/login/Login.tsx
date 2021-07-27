@@ -1,37 +1,56 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import { Grid, CircularProgress, Tabs, Tab, TextField, Fade } from '@material-ui/core';
+import { Grid, CircularProgress, Tabs, Tab, TextField } from '@material-ui/core';
 import { Typography, Button } from '../../components/Wrappers/Wrappers';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 
 // styles
 import useStyles from './styles';
 
 // logo
-import logo from './logo.svg';
+import logo from '../../images/logo.svg';
 import google from '../../images/google.svg';
 
-// context
-import { useUserDispatch, loginUser } from '../../context/UserContext';
+//hooks
+import useHttpClient from '../../hooks/http-hook';
+import useAuth from '../../hooks/auth-hook';
 
-interface Props {
-  history: RouteComponentProps['history'];
-}
+import { useHistory } from 'react-router-dom';
+import { AuthRequestData } from '../../interfaces';
 
-function Login(props: Props) {
+function Login() {
   const classes = useStyles();
-
-  // global
-  const userDispatch = useUserDispatch();
 
   // local
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
   const [activeTabId, setActiveTabId] = useState(0);
-  const [nameValue, setNameValue] = useState('');
-  const [loginValue, setLoginValue] = useState('admin@flatlogic.com');
-  const [passwordValue, setPasswordValue] = useState('password');
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const { login } = useAuth();
+  const history = useHistory();
+  const { makeRequest } = useHttpClient();
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    let mode: 'login' | 'register';
+    activeTabId === 0 ? (mode = 'login') : (mode = 'register');
+    const requestData: AuthRequestData = { username, password };
+    if (mode === 'register') {
+      requestData.email = email;
+    }
+    const result = await makeRequest({
+      url: `/auth/${mode}`,
+      method: 'post',
+      data: requestData,
+    });
+    if (result && result.accessToken && result.refreshToken) {
+      const { accessToken, refreshToken } = result;
+      login(accessToken, refreshToken);
+      history.push('/app/home');
+    }
+  };
 
   return (
     <Grid container className={classes.container}>
@@ -67,24 +86,19 @@ function Login(props: Props) {
                 <Typography className={classes.formDividerWord}>or</Typography>
                 <div className={classes.formDivider} />
               </div>
-              <Fade in={error}>
-                <Typography color="secondary" className={classes.errorMessage}>
-                  Something is wrong with your login or password :(
-                </Typography>
-              </Fade>
               <TextField
-                id="email"
+                id="username"
                 InputProps={{
                   classes: {
                     underline: classes.textFieldUnderline,
                     input: classes.textField,
                   },
                 }}
-                value={loginValue}
-                onChange={(e) => setLoginValue(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 margin="normal"
-                placeholder="Email Adress"
-                type="email"
+                placeholder="Username"
+                type="text"
                 fullWidth
               />
               <TextField
@@ -95,8 +109,8 @@ function Login(props: Props) {
                     input: classes.textField,
                   },
                 }}
-                value={passwordValue}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 margin="normal"
                 placeholder="Password"
                 type="password"
@@ -107,10 +121,8 @@ function Login(props: Props) {
                   <CircularProgress size={26} className={classes.loginLoader} />
                 ) : (
                   <Button
-                    disabled={loginValue.length === 0 || passwordValue.length === 0}
-                    onClick={() =>
-                      loginUser(userDispatch!, loginValue, passwordValue, props.history, setIsLoading, setError)
-                    }
+                    disabled={username.length === 0 || password.length === 0}
+                    onClick={(e: React.SyntheticEvent) => handleSubmit(e)}
                     constiant="contained"
                     color="primary"
                     size="large"
@@ -132,26 +144,6 @@ function Login(props: Props) {
               <Typography constiant="h2" className={classes.subGreeting}>
                 Create your account
               </Typography>
-              <Fade in={error}>
-                <Typography color="secondary" className={classes.errorMessage}>
-                  Something is wrong with your login or password :(
-                </Typography>
-              </Fade>
-              <TextField
-                id="name"
-                InputProps={{
-                  classes: {
-                    underline: classes.textFieldUnderline,
-                    input: classes.textField,
-                  },
-                }}
-                value={nameValue}
-                onChange={(e) => setNameValue(e.target.value)}
-                margin="normal"
-                placeholder="Full Name"
-                type="text"
-                fullWidth
-              />
               <TextField
                 id="email"
                 InputProps={{
@@ -160,11 +152,26 @@ function Login(props: Props) {
                     input: classes.textField,
                   },
                 }}
-                value={loginValue}
-                onChange={(e) => setLoginValue(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 margin="normal"
-                placeholder="Email Adress"
+                placeholder="Email address"
                 type="email"
+                fullWidth
+              />
+              <TextField
+                id="username"
+                InputProps={{
+                  classes: {
+                    underline: classes.textFieldUnderline,
+                    input: classes.textField,
+                  },
+                }}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                margin="normal"
+                placeholder="Username"
+                type="text"
                 fullWidth
               />
               <TextField
@@ -175,8 +182,8 @@ function Login(props: Props) {
                     input: classes.textField,
                   },
                 }}
-                value={passwordValue}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 margin="normal"
                 placeholder="Password"
                 type="password"
@@ -187,10 +194,8 @@ function Login(props: Props) {
                   <CircularProgress size={26} />
                 ) : (
                   <Button
-                    onClick={() =>
-                      loginUser(userDispatch!, loginValue, passwordValue, props.history, setIsLoading, setError)
-                    }
-                    disabled={loginValue.length === 0 || passwordValue.length === 0 || nameValue.length === 0}
+                    onClick={(e: React.SyntheticEvent) => handleSubmit(e)}
+                    disabled={email.length === 0 || username.length === 0 || password.length === 0}
                     size="large"
                     variant="contained"
                     color="primary"

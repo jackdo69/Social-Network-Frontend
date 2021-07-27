@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 // components
 import Layout from './Layout/Layout';
@@ -9,10 +9,29 @@ import Login from '../pages/login/Login';
 
 // hook
 import useAuth from '../hooks/auth-hook';
+import useInitData from '../hooks/init-data-hook';
+import * as jwt from 'jsonwebtoken';
+import { ACCESS_TOKEN } from '../constants';
 
 export default function App() {
   // global
   const { isLoggedIn } = useAuth();
+
+  const { fetchPosts, getUserInfo, getFriendsSuggestions } = useInitData();
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      const token = localStorage.getItem(ACCESS_TOKEN);
+      if (token) {
+        const decoded = jwt.decode(token);
+        fetchPosts();
+        if (decoded !== null && typeof decoded !== 'string') {
+          getUserInfo(decoded.userId);
+          getFriendsSuggestions(decoded.userId);
+        }
+      }
+    }
+  });
 
   return (
     <HashRouter>

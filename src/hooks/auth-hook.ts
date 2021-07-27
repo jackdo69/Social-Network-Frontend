@@ -64,7 +64,7 @@ const useAuth = () => {
       refreshToken && login(accessToken, refreshToken);
     } catch (e) {
       logout();
-      history.push('/auth');
+      history.push('/login');
     }
   };
 

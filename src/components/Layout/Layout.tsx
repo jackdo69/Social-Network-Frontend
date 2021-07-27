@@ -13,6 +13,11 @@ import useStyles from './styles';
 // components
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
+import Loading from '../../components/Loading/Loading';
+import Toast from '../../components/Toast/Toast';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import useForm from '../../hooks/form-hook';
 
 // pages
 import Home from '../../pages/home/Home';
@@ -24,15 +29,21 @@ import { useLayoutState } from '../../context/LayoutContext';
 
 function Layout(props: { history: RouteComponentProps['history'] }) {
   const classes = useStyles();
-
+  const { Form, openForm } = useForm();
   // global
   const layoutState = useLayoutState();
 
   return (
     <div className={classes.root}>
       <>
+        <Loading />
+        <Toast />
         <Header history={props.history} />
         <Sidebar />
+        {Form}
+        <Fab className={classes.fab} color="primary" aria-label="add" onClick={() => openForm({ action: 'addPost' })}>
+          <AddIcon />
+        </Fab>
         <div
           className={classnames(classes.content, {
             [classes.contentShift]: layoutState!.isSidebarOpened,

@@ -28,4 +28,9 @@ export default makeStyles((theme: Theme) => ({
       paddingLeft: 15,
     },
   },
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing(10),
+    right: theme.spacing(10),
+  },
 }));
