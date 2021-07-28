@@ -21,6 +21,7 @@ type TText = 'text' | 'white';
 type TCombined = TColor | TText;
 // type TColorBrightness = keyof (PaletteColor & TypeText);
 type TColorBrightness = 'light' | 'main' | 'dark' | 'contrastText' | 'primary' | 'secondary' | 'disabled' | 'hint';
+type TWeight = 'light' | 'medium' | 'bold';
 interface Props {
   children: React.FC | React.ReactNode;
   [key: string]: unknown;
@@ -32,7 +33,7 @@ interface BadgeProps extends Props {
 }
 
 interface TypographyProps extends BadgeProps {
-  weight?: string;
+  weight?: TWeight;
   size?: string;
   constiant?: Variant;
 }
@@ -165,7 +166,7 @@ function getColor(color: TCombined, theme: Theme, brightness: TColorBrightness =
   }
 }
 
-function getFontWeight(style: string) {
+function getFontWeight(style: TWeight) {
   switch (style) {
     case 'light':
       return 300;

@@ -3,6 +3,9 @@ import { Grid, CircularProgress, Tabs, Tab, TextField } from '@material-ui/core'
 import { Typography, Button } from '../../components/Wrappers/Wrappers';
 import { withRouter } from 'react-router-dom';
 import classnames from 'classnames';
+import Toast from '../../components/Toast/Toast';
+import { useDispatch } from 'react-redux';
+import { toastActions } from '../../store/toast';
 
 // styles
 import useStyles from './styles';
@@ -20,6 +23,7 @@ import { AuthRequestData } from '../../interfaces';
 
 function Login() {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   // local
   const [isLoading, setIsLoading] = useState(false);
@@ -49,11 +53,20 @@ function Login() {
       const { accessToken, refreshToken } = result;
       login(accessToken, refreshToken);
       history.push('/app/home');
+    } else {
+      setIsLoading(false);
+      dispatch(
+        toastActions.setToast({
+          severity: 'error',
+          message: 'Incorrect username or password!',
+        }),
+      );
     }
   };
 
   return (
     <Grid container className={classes.container}>
+      <Toast />
       <div className={classes.logotypeContainer}>
         <img src={logo} alt="logo" className={classes.logotypeImage} />
         <Typography weight="medium" size="xxxl" className={classes.logotypeText}>

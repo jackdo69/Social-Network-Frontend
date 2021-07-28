@@ -1,7 +1,8 @@
 import React from 'react';
 import useImageService from '../../hooks/image-hook';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { Box, Typography, Button, withStyles, createStyles } from '@material-ui/core';
+import { Box, withStyles, createStyles } from '@material-ui/core';
+import { Button, Typography } from '../../components/Wrappers/Wrappers';
 import useStyles from './styles';
 import { UploadImagePropsFunction } from '../../interfaces';
 
@@ -53,13 +54,13 @@ export default function UploadImage(props: UploadImagePropsFunction) {
             accept="image/*"
             onChange={selectFile}
           />
-          <Button className={classes.imageButton} color="default" variant="contained" component="span">
+          <Button className={classes.imageButton} color="primary" variant="contained" component="span">
             Choose Image
           </Button>
         </label>
         <Button
           className={classes.imageButton}
-          color="primary"
+          color="success"
           variant="contained"
           component="span"
           disabled={!image}
@@ -68,7 +69,9 @@ export default function UploadImage(props: UploadImagePropsFunction) {
           Upload Image
         </Button>
       </div>
-      <div className="file-name">{image ? image.name : null}</div>
+      <Typography color="secondary" colorBrightness="light" weight="medium" constiant="h3">
+        {image ? image.name : null}
+      </Typography>
 
       {image && (
         <Box className="my20" display="flex" alignItems="center">
@@ -76,7 +79,7 @@ export default function UploadImage(props: UploadImagePropsFunction) {
             <BorderLinearProgress variant="determinate" value={progress} />
           </Box>
           <Box minWidth={35}>
-            <Typography variant="body2" color="textSecondary">{`${progress}%`}</Typography>
+            <Typography variant="body2" color="success">{`${progress}%`}</Typography>
           </Box>
         </Box>
       )}

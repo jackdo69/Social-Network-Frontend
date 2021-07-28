@@ -37,7 +37,7 @@ function Layout(props: { history: RouteComponentProps['history'] }) {
     <div className={classes.root}>
       <>
         <Loading />
-        <Toast />
+        {/* <Toast /> */}
         <Header history={props.history} />
         <Sidebar />
         {Form}

@@ -19,6 +19,7 @@ import useStyles from './styles';
 import { Badge, Typography, TColor } from '../Wrappers/Wrappers';
 import { Notification, typesIcons } from '../Notification/Notification';
 import UserAvatar from '../UserAvatar/UserAvatar';
+import Toast from '../Toast/Toast';
 
 // context
 import { useLayoutState, useLayoutDispatch, toggleSidebar } from '../../context/LayoutContext';
@@ -120,6 +121,7 @@ export default function Header(props: { history: RouteComponentProps['history'] 
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
+      <Toast />
       <Toolbar className={classes.toolbar}>
         <IconButton
           color="inherit"

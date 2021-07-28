@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PostSliceState, Post } from '../interfaces';
+import { PostSliceState, IPost } from '../interfaces';
 
 const initialPostState: PostSliceState = { posts: [] };
 
@@ -7,10 +7,10 @@ const postSlice = createSlice({
   name: 'post',
   initialState: initialPostState,
   reducers: {
-    loadPosts(state, action: PayloadAction<{ posts: Array<Post> }>) {
+    loadPosts(state, action: PayloadAction<{ posts: Array<IPost> }>) {
       state.posts = action.payload.posts;
     },
-    addPost(state, action: PayloadAction<{ post: Post }>) {
+    addPost(state, action: PayloadAction<{ post: IPost }>) {
       state.posts.push(action.payload.post);
     },
     removePost(state, action: PayloadAction<{ id: string }>) {

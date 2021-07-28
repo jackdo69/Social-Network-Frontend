@@ -1,7 +1,7 @@
 import { Method } from 'axios';
 import React from 'react';
 
-interface Post {
+interface IPost {
   id: string;
   content: string;
   createdAt: string;
@@ -97,7 +97,7 @@ interface FriendSuggestion {
 }
 
 export {
-  Post,
+  IPost,
   UploadImagePropsFunction,
   ContainerProps,
   LayoutProps,
