@@ -35,7 +35,7 @@ function Login() {
   const history = useHistory();
   const { makeRequest } = useHttpClient();
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent | KeyboardEvent) => {
     e.preventDefault();
     setIsLoading(true);
     let mode: 'login' | 'register';
@@ -63,6 +63,12 @@ function Login() {
       );
     }
   };
+
+  function handleKeydown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter') {
+      handleSubmit(e);
+    }
+  }
 
   return (
     <Grid container className={classes.container}>
@@ -124,6 +130,7 @@ function Login() {
                 }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyPress={(e: React.KeyboardEvent) => handleKeydown(e)}
                 margin="normal"
                 placeholder="Password"
                 type="password"
@@ -197,6 +204,7 @@ function Login() {
                 }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyPress={(e: React.KeyboardEvent) => handleKeydown(e)}
                 margin="normal"
                 placeholder="Password"
                 type="password"

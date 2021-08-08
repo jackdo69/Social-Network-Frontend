@@ -5,10 +5,14 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/index';
 
 //components
-import PageTitle from '../../components/PageTitle/PageTitle';
 import { IPost } from '../../interfaces';
+import { useEffect } from 'react';
+import { ACCESS_TOKEN } from '../../constants';
+import useInitData from '../../hooks/init-data-hook';
+import * as jwt from 'jsonwebtoken';
 
 export default function Home() {
+  const { fetchPosts, getUserInfo, getFriendsSuggestions } = useInitData();
   const posts = useSelector((state: RootState) => state.post.posts);
   let fetchedPosts;
   if (posts && posts.length) {
@@ -26,6 +30,19 @@ export default function Home() {
       );
     });
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    if (token) {
+      const decoded = jwt.decode(token);
+      fetchPosts();
+      if (decoded !== null && typeof decoded !== 'string') {
+        getUserInfo(decoded.userId);
+        getFriendsSuggestions(decoded.userId);
+      }
+    }
+  }, []);
+
   return (
     <>
       <Grid container spacing={4}>

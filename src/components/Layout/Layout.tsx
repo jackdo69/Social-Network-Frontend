@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Redirect, withRouter, RouteComponentProps } from 'react-router-dom';
+import { Route, Switch, withRouter, RouteComponentProps } from 'react-router-dom';
 import classnames from 'classnames';
 import { Box, IconButton, Link } from '@material-ui/core';
 import Icon from '@mdi/react';
@@ -14,7 +14,6 @@ import useStyles from './styles';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import Loading from '../../components/Loading/Loading';
-import Toast from '../../components/Toast/Toast';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import useForm from '../../hooks/form-hook';
