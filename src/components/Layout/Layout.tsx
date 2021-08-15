@@ -16,6 +16,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import Loading from '../../components/Loading/Loading';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import ChatBox from '../ChatBox/ChatBox';
 import useForm from '../../hooks/form-hook';
 
 // pages
@@ -36,13 +37,13 @@ function Layout(props: { history: RouteComponentProps['history'] }) {
     <div className={classes.root}>
       <>
         <Loading />
-        {/* <Toast /> */}
         <Header history={props.history} />
         <Sidebar />
         {Form}
         <Fab className={classes.fab} color="primary" aria-label="add" onClick={() => openForm({ action: 'addPost' })}>
           <AddIcon />
         </Fab>
+        <ChatBox />
         <div
           className={classnames(classes.content, {
             [classes.contentShift]: layoutState!.isSidebarOpened,

@@ -16,12 +16,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export type TColor = 'primary' | 'secondary' | 'success' | 'error' | 'warning';
+export type TColor = 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info';
 type TText = 'text' | 'white';
 type TCombined = TColor | TText;
 // type TColorBrightness = keyof (PaletteColor & TypeText);
 type TColorBrightness = 'light' | 'main' | 'dark' | 'contrastText' | 'primary' | 'secondary' | 'disabled' | 'hint';
 type TWeight = 'light' | 'medium' | 'bold';
+type TSize = 'sm' | 'md' | 'xl' | 'xxl' | 'xxxl';
 interface Props {
   children: React.FC | React.ReactNode;
   [key: string]: unknown;
@@ -34,7 +35,7 @@ interface BadgeProps extends Props {
 
 interface TypographyProps extends BadgeProps {
   weight?: TWeight;
-  size?: string;
+  size?: TSize;
   constiant?: Variant;
 }
 
@@ -154,7 +155,7 @@ function isTypeText(brightness: any): brightness is keyof TypeText {
 }
 
 function isColor(color: TCombined): color is TColor {
-  const ColorValues = ['primary', 'secondary', 'success', 'error', 'warning'];
+  const ColorValues = ['primary', 'secondary', 'success', 'error', 'warning', 'info'];
   return Boolean(ColorValues.indexOf(color) !== -1);
 }
 
@@ -179,12 +180,12 @@ function getFontWeight(style: TWeight) {
   }
 }
 
-function getFontSize<T extends Theme, V extends Variant>(size: string, variant: V, theme: T) {
+function getFontSize<T extends Theme, V extends Variant>(size: TSize, variant: V, theme: T) {
   let multiplier;
 
   switch (size) {
     case 'sm':
-      multiplier = 0.8;
+      multiplier = 1.2;
       break;
     case 'md':
       multiplier = 1.5;

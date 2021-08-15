@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, InputBase, Menu, MenuItem, Fab } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, InputBase, Menu, MenuItem, Avatar } from '@material-ui/core';
 import {
   Menu as MenuIcon,
-  MailOutline as MailIcon,
   NotificationsNone as NotificationsIcon,
   Person as AccountIcon,
   Search as SearchIcon,
-  Send as SendIcon,
   ArrowBack as ArrowBackIcon,
 } from '@material-ui/icons';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
 // styles
 import useStyles from './styles';
 
 // components
 import { Badge, Typography, TColor } from '../Wrappers/Wrappers';
-import { Notification, typesIcons } from '../Notification/Notification';
-import UserAvatar from '../UserAvatar/UserAvatar';
 import Toast from '../Toast/Toast';
+import ReplyRequestModal from '../ReplyRequestModal/ReplyRequestModal';
+import FriendList from '../FriendList/FriendList';
 
 // context
 import { useLayoutState, useLayoutDispatch, toggleSidebar } from '../../context/LayoutContext';
@@ -27,6 +26,8 @@ import { RouteComponentProps } from 'react-router-dom';
 
 //hooks
 import useAuth from '../../hooks/auth-hook';
+import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
 
 interface Message {
   id: number;
@@ -66,33 +67,6 @@ const messages: Array<Message> = [
     time: '9:09',
   },
 ];
-interface Notifcation {
-  color: TColor;
-  type: keyof typeof typesIcons;
-  message: string;
-  id: number;
-}
-
-const notifications: Array<Notifcation> = [
-  {
-    id: 1,
-    color: 'success',
-    type: 'info',
-    message: 'What is the best way to get ...',
-  },
-  {
-    id: 2,
-    color: 'secondary',
-    type: 'notification',
-    message: 'This is just a simple notification',
-  },
-  {
-    id: 3,
-    color: 'primary',
-    type: 'e-commerce',
-    message: '12 new orders has arrived today',
-  },
-];
 
 type ElementMenu = (EventTarget & HTMLButtonElement) | null;
 
@@ -110,15 +84,25 @@ export default function Header(props: { history: RouteComponentProps['history'] 
   const [isNotificationsUnread, setIsNotificationsUnread] = useState(true);
   const [profileMenu, setProfileMenu] = useState<ElementMenu>(null);
   const [isSearchOpen, setSearchOpen] = useState(false);
-
+  const [openRequestModal, setOpenRequestModal] = useState(false);
+  const [requestModalId, setRequestModalId] = useState('');
   const { logout } = useAuth();
   const history = useHistory();
+  const image = useSelector((state: RootState) => state.user.image);
+  const username = useSelector((state: RootState) => state.user.username);
+  const email = useSelector((state: RootState) => state.user.email);
+  const notifications = useSelector((state: RootState) => state.user.notifications);
 
   const signout = () => {
     logout();
     history.push('/login');
   };
 
+  const callRequestModal = (id: string) => {
+    setNotificationsMenu(null);
+    setOpenRequestModal(true);
+    setRequestModalId(id);
+  };
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toast />
@@ -142,7 +126,13 @@ export default function Header(props: { history: RouteComponentProps['history'] 
             />
           )}
         </IconButton>
-        <Typography size="xl" variant="h6" weight="medium" className={classes.logotype}>
+        <Typography
+          onClick={() => history.push('/app')}
+          size="xl"
+          variant="h6"
+          weight="medium"
+          className={classes.logotype}
+        >
           Social Network
         </Typography>
         <div className={classes.grow} />
@@ -177,7 +167,7 @@ export default function Header(props: { history: RouteComponentProps['history'] 
           }}
           className={classes.headerMenuButton}
         >
-          <Badge badgeContent={isNotificationsUnread ? notifications.length : null} color="warning">
+          <Badge badgeContent={isNotificationsUnread && notifications ? notifications.length : null} color="warning">
             <NotificationsIcon classes={{ root: classes.headerIcon }} />
           </Badge>
         </IconButton>
@@ -192,7 +182,7 @@ export default function Header(props: { history: RouteComponentProps['history'] 
           className={classes.headerMenuButton}
         >
           <Badge badgeContent={isMailsUnread ? messages.length : null} color="secondary">
-            <MailIcon classes={{ root: classes.headerIcon }} />
+            <QuestionAnswerIcon classes={{ root: classes.headerIcon }} />
           </Badge>
         </IconButton>
         <IconButton
@@ -202,7 +192,7 @@ export default function Header(props: { history: RouteComponentProps['history'] 
           aria-controls="profile-menu"
           onClick={(e) => setProfileMenu(e.currentTarget)}
         >
-          <AccountIcon classes={{ root: classes.headerIcon }} />
+          <Avatar alt="User picture" src={image} />
         </IconButton>
         <Menu
           id="mail-menu"
@@ -214,36 +204,7 @@ export default function Header(props: { history: RouteComponentProps['history'] 
           classes={{ paper: classes.profileMenu }}
           disableAutoFocusItem
         >
-          <div className={classes.profileMenuUser}>
-            <Typography variant="h4" weight="medium">
-              New Messages
-            </Typography>
-            <Typography className={classes.profileMenuLink} component="a" color="secondary">
-              {messages.length} New Messages
-            </Typography>
-          </div>
-          {messages.map((message) => (
-            <MenuItem key={message.id} className={classes.messageNotification}>
-              <div className={classes.messageNotificationSide}>
-                <UserAvatar color={message.constiant} name={message.name} />
-                <Typography size="sm" color="text" colorBrightness="secondary">
-                  {message.time}
-                </Typography>
-              </div>
-              <div className={classNames(classes.messageNotificationSide, classes.messageNotificationBodySide)}>
-                <Typography weight="medium" gutterBottom>
-                  {message.name}
-                </Typography>
-                <Typography color="text" colorBrightness="secondary">
-                  {message.message}
-                </Typography>
-              </div>
-            </MenuItem>
-          ))}
-          <Fab variant="extended" color="primary" aria-label="Add" className={classes.sendMessageButton}>
-            Send New Message
-            <SendIcon className={classes.sendButtonIcon} />
-          </Fab>
+          <FriendList close={() => setMailMenu(null)} />
         </Menu>
         <Menu
           id="notifications-menu"
@@ -253,15 +214,17 @@ export default function Header(props: { history: RouteComponentProps['history'] 
           className={classes.headerMenu}
           disableAutoFocusItem
         >
-          {notifications.map((notification) => (
-            <MenuItem
-              key={notification.id}
-              onClick={() => setNotificationsMenu(null)}
-              className={classes.headerMenuItem}
-            >
-              <Notification {...notification} typographyVariant="inherit" />
-            </MenuItem>
-          ))}
+          {notifications && notifications.length ? (
+            notifications.map((not) => {
+              return (
+                <MenuItem onClick={() => callRequestModal(not.id)} key={not.id}>
+                  <b>{not.username}</b> &nbsp; sent you a friend request!
+                </MenuItem>
+              );
+            })
+          ) : (
+            <MenuItem>No notificatiosn</MenuItem>
+          )}
         </Menu>
         <Menu
           id="profile-menu"
@@ -274,10 +237,10 @@ export default function Header(props: { history: RouteComponentProps['history'] 
         >
           <div className={classes.profileMenuUser}>
             <Typography variant="h4" weight="medium">
-              John Smith
+              {username}
             </Typography>
             <Typography className={classes.profileMenuLink} component="a" color="primary" href="https://flatlogic.com">
-              Flalogic.com
+              {email}
             </Typography>
           </div>
           <MenuItem className={classNames(classes.profileMenuItem, classes.headerMenuItem)}>
@@ -296,6 +259,7 @@ export default function Header(props: { history: RouteComponentProps['history'] 
           </div>
         </Menu>
       </Toolbar>
+      <ReplyRequestModal id={requestModalId} open={openRequestModal} onClose={() => setOpenRequestModal(false)} />
     </AppBar>
   );
 }

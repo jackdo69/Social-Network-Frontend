@@ -66,11 +66,16 @@ interface ToastSliceState {
   show?: boolean;
 }
 
+interface ChatSliceState {
+  show: boolean;
+  receiverId: string;
+  receiverUsername: string;
+}
 interface UserSliceState {
-  id?: string;
-  image?: string;
-  username?: string;
-  email?: string;
+  id: string;
+  image: string;
+  username: string;
+  email: string;
   friends?: Array<T>;
   notifications?: Array<T>;
   requestSent?: Array<T>;
@@ -94,6 +99,14 @@ interface FriendSuggestion {
   id: string;
   username: string;
   image: string;
+  bio: string;
+}
+
+interface Message {
+  content: string;
+  senderId: string;
+  receiverId: string;
+  createdAt: number;
 }
 
 export {
@@ -112,4 +125,6 @@ export {
   FriendSliceState,
   FormParams,
   FriendSuggestion,
+  ChatSliceState,
+  Message,
 };

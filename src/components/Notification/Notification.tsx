@@ -100,7 +100,7 @@ export function Notification({ variant, ...props }: Props) {
             [classes.containedTypography]: variant === 'contained',
           })}
           variant={props.typographyVariant}
-          size={variant !== 'contained' && !props.typographyVariant ? 'md' : ''}
+          size={variant !== 'contained' && !props.typographyVariant ? 'md' : 'sm'}
         >
           {props.message}
         </Typography>

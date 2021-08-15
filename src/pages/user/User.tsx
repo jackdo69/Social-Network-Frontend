@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
+import Profile from '../../components/Profile/Profile';
 
 //components
-import PageTitle from '../../components/PageTitle/PageTitle';
 
 export default function User() {
-  return <PageTitle title="User" />;
+  return <Profile />;
 }

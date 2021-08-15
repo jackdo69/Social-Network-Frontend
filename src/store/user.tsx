@@ -24,7 +24,7 @@ const userSlice = createSlice({
       if (action.payload.notifications) state.notifications = action.payload.notifications;
       if (action.payload.requestSent) state.requestSent = action.payload.requestSent;
     },
-    setImage(state, action: PayloadAction<UserSliceState>) {
+    setImage(state, action: PayloadAction<{ image: string }>) {
       state.image = action.payload.image;
     },
     addRequest(state, action: PayloadAction<{ user: { id: string; username: string } }>) {

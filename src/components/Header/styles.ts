@@ -13,6 +13,7 @@ export default makeStyles((theme: Theme) => ({
     [theme.breakpoints.down('xs')]: {
       display: 'none',
     },
+    cursor: 'pointer',
   },
   appBar: {
     width: '100vw',
