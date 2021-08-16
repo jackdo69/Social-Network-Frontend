@@ -22,7 +22,7 @@ type TCombined = TColor | TText;
 // type TColorBrightness = keyof (PaletteColor & TypeText);
 type TColorBrightness = 'light' | 'main' | 'dark' | 'contrastText' | 'primary' | 'secondary' | 'disabled' | 'hint';
 type TWeight = 'light' | 'medium' | 'bold';
-type TSize = 'sm' | 'md' | 'xl' | 'xxl' | 'xxxl';
+type TSize = 'xs' | 'sm' | 'md' | 'xl' | 'xxl' | 'xxxl';
 interface Props {
   children: React.FC | React.ReactNode;
   [key: string]: unknown;
@@ -184,6 +184,9 @@ function getFontSize<T extends Theme, V extends Variant>(size: TSize, variant: V
   let multiplier;
 
   switch (size) {
+    case 'xs':
+      multiplier = 0.8;
+      break;
     case 'sm':
       multiplier = 1.2;
       break;

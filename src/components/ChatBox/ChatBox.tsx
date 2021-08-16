@@ -7,7 +7,7 @@ import { MessageLeft, MessageRight } from './Message';
 import { Box } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { Message } from '../../interfaces';
-
+import ScrollToBottom from 'react-scroll-to-bottom';
 import useHttpClient from '../../hooks/http-hook';
 
 //redux
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
     },
     paper2: {
+      width: '22vw',
       maxHeight: '35vh',
       maxWidth: '500px',
       display: 'flex',
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     messagesBody: {
+      width: '22vw',
       margin: 10,
       overflowY: 'scroll',
       height: 'calc( 100% - 110px )',
@@ -81,6 +83,8 @@ export default function ChatBox() {
   }, [show]);
 
   socket.on('server-message', (message) => {
+    console.log('incoming message');
+
     if (message.receiverId === userId) {
       const clonedMessages = [...messages];
       clonedMessages.push(message);
@@ -153,9 +157,9 @@ export default function ChatBox() {
   if (messages && messages.length) {
     renderedMessages = messages.map((mess: Message) => {
       if (mess.senderId === userId) {
-        return <MessageRight key={mess.createdAt.toString()} message={mess.content} />;
+        return <MessageRight key={mess.createdAt.toString()} time={mess.createdAt} message={mess.content} />;
       } else {
-        return <MessageLeft key={mess.createdAt.toString()} message={mess.content} />;
+        return <MessageLeft key={mess.createdAt.toString()} time={mess.createdAt} message={mess.content} />;
       }
     });
   }
@@ -171,9 +175,9 @@ export default function ChatBox() {
             </div>
             <Button startIcon={<CloseIcon />} onClick={() => closeChatbox()} />
           </div>
-          <Paper id="style-1" className={classes.messagesBody}>
-            {renderedMessages}
-          </Paper>
+          {/* <Paper id="style-1" className={classes.messagesBody}> */}
+          <ScrollToBottom className={classes.messagesBody}>{renderedMessages}</ScrollToBottom>
+          {/* </Paper> */}
           <TextInput send={sendMessage} />
         </Paper>
       </Box>

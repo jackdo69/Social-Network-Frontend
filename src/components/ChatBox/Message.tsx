@@ -1,7 +1,8 @@
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
 import { deepOrange } from '@material-ui/core/colors';
+import moment from 'moment';
+import { Typography } from '../Wrappers/Wrappers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -115,6 +116,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface MessageProps {
   message: string;
+  time: number;
 }
 export const MessageLeft = (props: MessageProps) => {
   const message = props.message ? props.message : 'no message';
@@ -123,6 +125,9 @@ export const MessageLeft = (props: MessageProps) => {
     <>
       <div className={classes.messageRow}>
         <div>
+          <Typography size="xs" color="info">
+            {moment.unix(props.time).format('MMM Do YY')}
+          </Typography>
           <div className={classes.messageBlue}>
             <div>
               <p className={classes.messageContent}>{message}</p>
@@ -138,8 +143,14 @@ export const MessageRight = (props: MessageProps) => {
   const message = props.message ? props.message : 'no message';
   return (
     <div className={classes.messageRowRight}>
-      <div className={classes.messageOrange}>
-        <p className={classes.messageContent}>{message}</p>
+      <div>
+        <Typography size="xs" color="info">
+          {moment.unix(props.time).format('MMM Do YY')}
+        </Typography>
+
+        <div className={classes.messageOrange}>
+          <p className={classes.messageContent}>{message}</p>
+        </div>
       </div>
     </div>
   );
